@@ -1,7 +1,8 @@
 import { styled} from "styled-components";
 import {useState} from "react";
 
-
+//title은 추가해야 함 채팅방 맨 위를 가리키는 거 
+//메시지 룸 추가하면서 채팅방 이름 갖게되면 그거에 따라 div에 출력하도록 해야함
 const Title = styled.div`
     height:60px;
     padding:20px;

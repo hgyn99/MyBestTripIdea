@@ -3,7 +3,7 @@ import { auth, db, storage } from "../firebase";
 import { IMessage } from "./chat-timeline";
 import styled from "styled-components";
 import { deleteObject, ref } from "firebase/storage";
-import react from "react";
+import react, {useState} from "react";
 
 
 //메시지 내용 보여지는 틀
@@ -59,8 +59,53 @@ const DeleteButton = styled.button`
     cursor: pointer;
 `;
 //추후 사용예정
+
+//출력된 사진 눌렀을 때 확대하기 위한 모달
+const ImageModal = styled.div`
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    background-color: white;
+    padding: 20px;
+    max-width: 80%;
+    max-height: 80%;
+    overflow: auto;
+    &::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* Firefox */
+    scrollbar-width: none;
+    
+`;
+
+const ImageModalBackground = styled.div`
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+`;
+
+
 export default function Message({ username, photo, message, userId, id, time }: IMessage) {
     const user = auth.currentUser;
+    const [showModal, setShowModal] = useState(false);
+
+    const handleShowModal = () => {
+        setShowModal(true);
+    };
+
+    // 모달 닫기 함수
+    const handleCloseModal = () => {
+        setShowModal(false);
+    };
+
+
         // 지우는 기능은 추후 사용 예정
     const onDelete = async () => {
         const ok = confirm("Are you sure you want to delete this message?");
@@ -80,13 +125,34 @@ export default function Message({ username, photo, message, userId, id, time }: 
     const formattedTime = `${String(timestampToDate?.getHours()).padStart(2, '0')}:${String(timestampToDate?.getMinutes()).padStart(2, '0')}`;
     
     const isCurrentUser = user?.uid === userId;
-    return (    
-        <ChatBubble isCurrentUser={isCurrentUser}>
-            <Username isCurrentUser={isCurrentUser}>{username}</Username>
-            {photo && <Photo src={photo} alt="Uploaded by user" />} {/* Conditionally render the photo if provided */}
-            <Bubble isCurrentUser={isCurrentUser}>{message}</Bubble>
-            <Timestamp isCurrentUser={isCurrentUser}>{formattedTime}</Timestamp>
-        </ChatBubble>
-    )
+    return (
+        <>
+            <ChatBubble isCurrentUser={isCurrentUser}>
+                <Username isCurrentUser={isCurrentUser}>{username}</Username>
+                
+                {photo && (
+                    <Photo
+                        src={photo}
+                        alt="Uploaded by user"
+                        onClick={handleShowModal} // 사진 클릭 이벤트 핸들러를 추가합니다.
+                    />
+                )}
+    
+                {!photo && <Bubble isCurrentUser={isCurrentUser}>{message}</Bubble>} {/* Only render the Bubble if no photo is provided */}
+                
+                <Timestamp isCurrentUser={isCurrentUser}>{formattedTime}</Timestamp>
+            </ChatBubble>
+    
+            {/* 이미지를 확대하여 보여주는 모달 */}
+            {showModal && (
+                <>
+                    <ImageModalBackground onClick={handleCloseModal} />
+                    <ImageModal>
+                        <img src={photo} alt="Zoomed user upload" style={{ width: '100%', height: 'auto' }} />
+                    </ImageModal>
+                </>
+            )}
+        </>
+    );
     
 }
