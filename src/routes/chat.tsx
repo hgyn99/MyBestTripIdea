@@ -5,14 +5,14 @@ import ChatTimeline from "../components/chat-timeline";
 
 const Wrapper = styled.div`
     gap:50px;            //채팅 틀
-    background-color:#F8E6E0;
+    background-color:#F6E3CE;
 `;
 
 const Divs = styled.div `
     position: fixed; //채팅 틀 
     bottom: 0;
     right: 0;
-    width: 70%;
+    width: 75%;
 `;
 export default function Chat() {
 
