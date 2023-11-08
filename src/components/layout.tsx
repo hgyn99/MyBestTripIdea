@@ -2,22 +2,23 @@ import { Outlet, Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { auth } from "../firebase";
 
+const Container = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+`;
 const Wrapper = styled.div`
     display:grid;
-    gap:20px;
     grid-template-columns: 1fr 4fr;
-    height: 100%;
-    padding: 0px 0px;
-    width: 100%;
-    
-
+    height: 20%;
+    width: 20%;
 `;
 
 const Menu = styled.div`
     display:flex;
     flex-direction: row;
     align-items:flex;
-    gap:20px;
+    gap:40px;
     align-items: flex-start; // 추가: 아이템들을 상단에 정렬
     justify-items: flex-start; // 추가: 아이템들을 왼쪽에 정렬
 `;
@@ -43,6 +44,18 @@ const MenuItem = styled.div`
     }
 `;
 
+const MBTIBlock = styled.div`
+    font-family: 'Gluten', cursive; // 폰트 패밀리를 Gluten으로 설정
+    background-color: white; // 블록의 배경색
+    color: black; // 텍스트 색상
+    padding: 10px; // 텍스트 주변에 패딩 추가
+    border-radius: 4px; // 선택 사항: 모서리를 둥글게 하고 싶다면 설정
+    user-select: none; // 선택 사항: 사용자가 텍스트를 선택하지 못하게 함
+    font-size: 1rem; // 폰트 크기 설정
+    height:50px;
+    width: 50px;
+`;
+
 
 export default function Layout() {
     const navigate = useNavigate();
@@ -55,6 +68,8 @@ export default function Layout() {
 
     };
     return (
+        <>
+        <Container>
         <Wrapper>
             <Menu>
                 <Link to="/">
@@ -79,9 +94,16 @@ export default function Layout() {
 </svg>
 
                 </MenuItem>
+                
             </Menu>
             
         <Outlet />
         </Wrapper>
+        <Wrapper>
+        <MBTIBlock>MBTI</MBTIBlock>
+        </Wrapper>
+        </Container>
+        
+        </>
     );
 }
