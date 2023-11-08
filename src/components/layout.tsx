@@ -7,7 +7,7 @@ const Container = styled.div`
   flex-direction: column;
   align-items: flex-start;
 `;
-// ㅎㅇ
+
 const Wrapper = styled.div`
   display: grid;
   grid-template-columns: 1fr 4fr;
