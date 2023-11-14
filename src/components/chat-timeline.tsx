@@ -18,10 +18,9 @@ export interface IMessage {
 
 const Wrapper = styled.div`
     display: flex;
-    gap: 10px;
     flex-direction: column-reverse;
     overflow-y: auto; // 스크롤 가능하게 합니다.
-    height: 465px;
+    height: 100%;
     overflow-x: hidden;
 
     &::-webkit-scrollbar {

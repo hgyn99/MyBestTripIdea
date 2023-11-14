@@ -11,8 +11,9 @@ import LoadingScreen from "./components/loading-screen";
 import { auth } from "./firebase";
 import { styled} from "styled-components";
 import ProtectedRoute from "./components/protected-route";
+import ChatRooms from "./routes/chatrooms";
 const router = createBrowserRouter ([
-  {
+  /*{
     path:"/",
     element: <ProtectedRoute><Layout /></ProtectedRoute>,
     children: [
@@ -29,12 +30,28 @@ const router = createBrowserRouter ([
         element: <Chat />,
       },
     ],
-  },
+  },*/
   {
     path:"/login",
     element:<Login />
   },
-  {path: "/create-account", element:<CreateAccount />}
+  {path: "/create-account", element:<CreateAccount />},
+  {
+    path: "",
+    element: <Home />,
+  },
+  {
+    path: "profile",
+    element: <Profile />,
+  },
+  {
+    path: "chat",
+    element: <Chat />,
+  },
+  {
+    path: "chatrooms",
+    element: <ChatRooms/>,
+  },
 ]);
 
 
@@ -55,7 +72,6 @@ const GlobalStyles = createGlobalStyle`
 const Wrapper =styled.div`
     height: 100vh;
     display:flex;
-    justify-content: center;
     overflow-y:hidden;
 `;
 
