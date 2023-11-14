@@ -45,8 +45,6 @@ const Photo = styled.img`
     border-radius: 15px;
 `;
 
-
-
 const DeleteButton = styled.button`
     background-color: tomato;
     color: white;
@@ -138,7 +136,9 @@ export default function Message({ username, photo, message, userId, id, time }: 
                     />
                 )}
     
-                {!photo && <Bubble isCurrentUser={isCurrentUser}>{message}</Bubble>} {/* Only render the Bubble if no photo is provided */}
+                {!photo && <Bubble isCurrentUser={isCurrentUser}>
+                    {message}
+                    </Bubble>} {/* Only render the Bubble if no photo is provided */}
                 
                 <Timestamp isCurrentUser={isCurrentUser}>{formattedTime}</Timestamp>
             </ChatBubble>

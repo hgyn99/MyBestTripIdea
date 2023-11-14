@@ -1,5 +1,5 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Layout from "./components/layout";
+import Navigation from "./components/navigation";
 import Home from "./routes/home";
 import Profile from "./routes/profile";
 import Login from "./routes/login";
@@ -13,24 +13,20 @@ import { styled} from "styled-components";
 import ProtectedRoute from "./components/protected-route";
 import ChatRooms from "./routes/chatrooms";
 const router = createBrowserRouter ([
-  /*{
+  {
     path:"/",
-    element: <ProtectedRoute><Layout /></ProtectedRoute>,
+    element: <ProtectedRoute><Navigation /></ProtectedRoute>,
     children: [
       {
-        path: "",
-        element: <Home />,
+        path: "chatrooms",
+        element: <ChatRooms />,
       },
       {
         path: "profile",
         element: <Profile />,
       },
-      {
-        path: "chat",
-        element: <Chat />,
-      },
     ],
-  },*/
+  },
   {
     path:"/login",
     element:<Login />

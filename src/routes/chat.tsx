@@ -2,7 +2,7 @@ import Chatting from "../components/chatting"
 import ChatTitle from "../components/chat-title"
 import { styled } from "styled-components";
 import ChatTimeline from "../components/chat-timeline";
-import LayOut from "../components/layout"
+import LayOut from "../components/chatlayout"
 
 const Wrapper = styled.div`
         //채팅 틀
