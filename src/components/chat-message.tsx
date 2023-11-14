@@ -151,14 +151,33 @@ export default function Message({
       {/* 이미지를 확대하여 보여주는 모달 */}
       {showModal && (
         <>
-          <ImageModalBackground onClick={handleCloseModal} />
-          <ImageModal>
-            <img
-              src={photo}
-              alt="Zoomed user upload"
-              style={{ width: "100%", height: "auto" }}
-            />
-          </ImageModal>
+            <ChatBubble isCurrentUser={isCurrentUser}>
+                <Username isCurrentUser={isCurrentUser}>{username}</Username>
+                
+                {photo && (
+                    <Photo
+                        src={photo}
+                        alt="Uploaded by user"
+                        onClick={handleShowModal} // 사진 클릭 이벤트 핸들러를 추가합니다.
+                    />
+                )}
+    
+                {!photo && <Bubble isCurrentUser={isCurrentUser}>
+                    {message}
+                    </Bubble>} {/* Only render the Bubble if no photo is provided */}
+                
+                <Timestamp isCurrentUser={isCurrentUser}>{formattedTime}</Timestamp>
+            </ChatBubble>
+    
+            {/* 이미지를 확대하여 보여주는 모달 */}
+            {showModal && (
+                <>
+                    <ImageModalBackground onClick={handleCloseModal} />
+                    <ImageModal>
+                        <img src={photo} alt="Zoomed user upload" style={{ width: '100%', height: 'auto' }} />
+                    </ImageModal>
+                </>
+            )}
         </>
       )}
     </>
