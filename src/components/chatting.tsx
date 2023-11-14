@@ -1,5 +1,5 @@
 import { styled } from "styled-components";
-import React, { useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { auth, db, storage } from "../firebase";
 import { addDoc, collection, updateDoc } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
@@ -14,7 +14,8 @@ const Form = styled.form`
 
 // 채팅 메세지 입력 css
 const TextArea = styled.textarea`
-  height: 60px;
+  height: 100%;
+  width: 100%;
   padding: 20px;
   font-size: 16px;
   color: black;
@@ -190,6 +191,7 @@ export default function SendMessageForm() {
     }
   };
 
+  // 전송
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const user = auth.currentUser;

@@ -11,14 +11,19 @@ import LoadingScreen from "./components/loading-screen";
 import { auth } from "./firebase";
 import { styled } from "styled-components";
 import ProtectedRoute from "./components/protected-route";
+import ChatRooms from "./routes/chatrooms";
+import Survey from "./routes/survey";
+import ChatroomsSurvey from "./routes/chatrooms-survey";
+// 폰트 추가
+import GmarketSansTTFBold from "./fonts/GmarketSansTTFBold.ttf";
+import GmarketSansTTFMedium from "./fonts/GmarketSansTTFMedium.ttf";
+import GmarketSansTTFLight from "./fonts/GmarketSansTTFLight.ttf";
+import Jalnan2TTF from "./fonts/Jalnan2TTF.ttf";
+
 const router = createBrowserRouter([
-  {
-    path: "/",
-    element: (
-      <ProtectedRoute>
-        <Layout />
-      </ProtectedRoute>
-    ),
+  /*{
+    path:"/",
+    element: <ProtectedRoute><Layout /></ProtectedRoute>,
     children: [
       {
         path: "",
@@ -33,16 +38,65 @@ const router = createBrowserRouter([
         element: <Chat />,
       },
     ],
-  },
+  },*/
   {
     path: "/login",
     element: <Login />,
   },
   { path: "/create-account", element: <CreateAccount /> },
+  {
+    path: "",
+    element: <Home />,
+  },
+  {
+    path: "profile",
+    element: <Profile />,
+  },
+  {
+    path: "chat",
+    element: <Chat />,
+  },
+  {
+    path: "chatrooms",
+    element: <ChatRooms />,
+  },
+  {
+    path: "survey",
+    element: <Survey />,
+  },
+  {
+    path: "chatrooms-survey",
+    element: <ChatroomsSurvey />,
+  },
 ]);
 
-// 로그인 화면 및 로그인 후 화면 전체 스타일
+// 여기에 폰트 추가 가능
 const GlobalStyles = createGlobalStyle`
+
+@font-face {
+        font-family: 'GmarketSansTTFBold';
+        src: local('GmarketSansTTFBold'), local('GmarketSansTTFBold');
+        font-style: normal;
+        src: url(${GmarketSansTTFBold}) format('truetype');
+  }
+  @font-face {
+        font-family: 'GmarketSansTTFMedium';
+        src: local('GmarketSansTTFMedium'), local('GmarketSansTTFMedium');
+        font-style: normal;
+        src: url(${GmarketSansTTFMedium}) format('truetype');
+  }
+  @font-face {
+        font-family: 'GmarketSansTTFLight';
+        src: local('GmarketSansTTFLight'), local('GmarketSansTTFLight');
+        font-style: normal;
+        src: url(${GmarketSansTTFLight}) format('truetype');
+  }
+  @font-face {
+        font-family: 'Jalnan2TTF';
+        src: local('Jalnan2TTF'), local('Jalnan2TTF');
+        font-style: normal;
+        src: url(${Jalnan2TTF}) format('truetype');
+  }
   
   * {
     box-sizing: border-box;
@@ -58,7 +112,6 @@ const GlobalStyles = createGlobalStyle`
 const Wrapper = styled.div`
   height: 100vh;
   display: flex;
-  justify-content: center;
   overflow-y: hidden;
 `;
 
