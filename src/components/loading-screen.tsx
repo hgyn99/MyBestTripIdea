@@ -8,7 +8,7 @@ const Wrapper = styled.div`
 `;
 
 const Text = styled.span`
-    font-sizeL 24px;
+  font-size: 24px;
 `;
 
 // 로그인 할 때 로그인 버튼에 뜨는 로딩중 화면
