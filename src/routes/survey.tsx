@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { styled } from "styled-components";
 import "../App.tsx";
 
@@ -19,7 +20,7 @@ const Divs = styled.div`
   top: 0;
   right: 0;
   width: 75%;
-  height: 80%;
+  height: 100%;
   color: black;
   font-size: 20px;
   // 가운데 정렬
@@ -95,7 +96,7 @@ const questions: Question[] = [
 // 질문 틀
 const QuestionFrame = styled.div`
   padding: 15px; // 안쪽 여백
-  margin-top: 30px;
+  margin-top: 20px;
   margin-bottom: 10px; // 바깥쪽 여백
   border-radius: 8px; // 모서리 둥글게
 `;
@@ -115,7 +116,7 @@ const OptionsContainer = styled.div`
   flex-direction: row; // 가로 방향 배열
   justify-content: start; // 왼쪽 정렬
   margin-left: 50px;
-  margin-top: 50px;
+  margin-top: 30px;
   margin-bottom: 15px; // 컨테이너 하단 여백
 `;
 
@@ -169,7 +170,7 @@ export default function Survey() {
       <Lay>
         <MBTIBlock>MBTI</MBTIBlock>
         <Survey_explain>
-          <li>보다 만족스러운 계획을 위해</li>{" "}
+          <li>보다 만족스러운 계획을 위해</li>
           <li>자신의 성향을 기록해주세요</li>
         </Survey_explain>
       </Lay>
@@ -195,8 +196,9 @@ export default function Survey() {
               </OptionsContainer>
             </QuestionFrame>
           ))}
-
-          <StyledButton type="submit">제출하기</StyledButton>
+          <Link to="/chat">
+            <StyledButton type="submit">제출하기</StyledButton>
+          </Link>
         </form>
       </Divs>
     </>

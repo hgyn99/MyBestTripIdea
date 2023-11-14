@@ -34,7 +34,7 @@ const DeleteButton = styled.button`
   background-color: tomato;
   color: white;
   font-weight: 600;
-  border: -;
+  border: 3px;
   font-size: 12px;
   padding: 5px 10px;
   text-transform: uppercase;

@@ -13,6 +13,8 @@ import { styled } from "styled-components";
 import ProtectedRoute from "./components/protected-route";
 import ChatRooms from "./routes/chatrooms";
 
+import Intro from "./routes/intro";
+
 import Survey from "./routes/survey";
 import ChatroomsSurvey from "./routes/chatrooms-survey";
 // 폰트 추가
@@ -20,13 +22,14 @@ import GmarketSansTTFBold from "./fonts/GmarketSansTTFBold.ttf";
 import GmarketSansTTFMedium from "./fonts/GmarketSansTTFMedium.ttf";
 import GmarketSansTTFLight from "./fonts/GmarketSansTTFLight.ttf";
 import Jalnan2TTF from "./fonts/Jalnan2TTF.ttf";
+import Layout from "./components/chatlayout";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: (
       <ProtectedRoute>
-        <Navigation />
+        <Intro />
       </ProtectedRoute>
     ),
     children: [

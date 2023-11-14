@@ -19,13 +19,13 @@ const Divs = styled.div`
   top: 0;
   right: 0;
   width: 75%;
-  height: 80%;
+  height: 100%;
   color: black;
   font-size: 20px;
   // 가운데 정렬
   display: flex;
   flex-direction: column;
-  justify-content: center; // 수직 가운데 정렬  
+  justify-content: center; // 수직 가운데 정렬
   //align-items: center; // 수평 가운데 정렬
 `;
 
@@ -57,7 +57,6 @@ const Chatroom_title = styled.div`
   font-family: "Jalnan2TTF";
   font-size: 56px;
   text-align: left;
-  margin-top: 100px;
   margin-left: 120px;
   list-style: none;
   line-height: 150%;
@@ -107,7 +106,6 @@ const questions: Question[] = [
 // 질문 틀
 const QuestionFrame = styled.div`
   padding: 15px; // 안쪽 여백
-  margin-top: 30px;
   margin-bottom: 10px; // 바깥쪽 여백
   border-radius: 8px; // 모서리 둥글게
 `;
@@ -127,8 +125,7 @@ const OptionsContainer = styled.div`
   flex-direction: row; // 가로 방향 배열
   justify-content: start; // 왼쪽 정렬
   margin-left: 50px;
-  margin-top: 50px;
-  margin-bottom: 15px; // 컨테이너 하단 여백
+  margin-top: 30px;
 `;
 
 // 선택지
@@ -206,10 +203,10 @@ export default function Survey() {
               </OptionsContainer>
             </QuestionFrame>
           ))}
-
           <StyledButton type="submit">제출하기</StyledButton>
         </form>
       </Divs>
     </>
   );
 }
+// <StyledButton type="submit">제출하기</StyledButton>로 변경하기
