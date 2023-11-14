@@ -11,7 +11,8 @@ const Form = styled.form`
 `;
 //채팅치는 코드
 const TextArea = styled.textarea`
-    height:60px;
+    height:100%;
+    width:100%;
     padding:20px;
     font-size:16px;
     color: black;

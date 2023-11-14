@@ -2,27 +2,49 @@ import Chatting from "../components/chatting"
 import ChatTitle from "../components/chat-title"
 import { styled } from "styled-components";
 import ChatTimeline from "../components/chat-timeline";
+import LayOut from "../components/layout"
 
 const Wrapper = styled.div`
-    gap:50px;            //채팅 틀
+        //채팅 틀
     background-color:#F6E3CE;
+    width:100%;
+    height:80%;
 `;
 
 const Divs = styled.div `
     position: fixed; //채팅 틀 
-    bottom: 0;
+    top: 0;
     right: 0;
     width: 75%;
+    height:100%;
+`;
+
+const Lay = styled.div `
+    width:25%;
+`;
+const C = styled.div`
+    width:100%;
+    height:10%;
 `;
 export default function Chat() {
 
     return (
+        <>
+        <Lay>
+            <LayOut />
+        </Lay>
         <Divs>
-        <ChatTitle/>
+        <C>
+        <ChatTitle/>    
+        </C>
         <Wrapper>
             <ChatTimeline />
         </Wrapper>
+        <C>
         <Chatting />
+        </C>
         </Divs>
+        </>
         );
+
 }
