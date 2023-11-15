@@ -6,18 +6,31 @@ import Login from "./routes/login";
 import CreateAccount from "./routes/create-accont";
 import Chat from "./routes/chat";
 import { createGlobalStyle } from "styled-components";
-import { useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 import LoadingScreen from "./components/loading-screen";
 import { auth } from "./firebase";
-import { styled} from "styled-components";
+import { styled } from "styled-components";
 import ProtectedRoute from "./components/protected-route";
 import ChatRooms from "./routes/chatrooms";
 import ChatAdd from "./routes/chatadd";
-import First from "./routes/first";
-const router = createBrowserRouter ([
+import Intro from "./routes/intro";
+import Survey from "./routes/survey";
+import ChatroomsSurvey from "./routes/chatrooms-survey";
+// 폰트 추가
+import GmarketSansTTFBold from "./fonts/GmarketSansTTFBold.ttf";
+import GmarketSansTTFMedium from "./fonts/GmarketSansTTFMedium.ttf";
+import GmarketSansTTFLight from "./fonts/GmarketSansTTFLight.ttf";
+import Jalnan2TTF from "./fonts/Jalnan2TTF.ttf";
+import Layout from "./components/chatlayout";
+
+const router = createBrowserRouter([
   {
-    path:"/",
-    element: <ProtectedRoute><Navigation /></ProtectedRoute>,
+    path: "/",
+    element: (
+      <ProtectedRoute>
+        <Navigation />
+      </ProtectedRoute>
+    ),
     children: [
       {
         path: "chatrooms",
@@ -32,16 +45,25 @@ const router = createBrowserRouter ([
         element: <ChatAdd />,
       },
       {
-        path: "first",
-        element: <First/>,
+        path: "",
+        element: <Intro />,
       },
     ],
   },
   {
-    path:"/login",
-    element:<Login />
+    path: "/login",
+    element: <Login />,
   },
-  {path: "/create-account", element:<CreateAccount />},
+  { path: "/create-account", element: <CreateAccount /> },
+  {
+    path: "",
+    element: <Home />,
+  },
+  {
+    path: "/login",
+    element: <Login />,
+  },
+  { path: "/create-account", element: <CreateAccount /> },
   {
     path: "",
     element: <Home />,
@@ -56,12 +78,45 @@ const router = createBrowserRouter ([
   },
   {
     path: "chatrooms",
-    element: <ChatRooms/>,
+    element: <ChatRooms />,
+  },
+  {
+    path: "survey",
+    element: <Survey />,
+  },
+  {
+    path: "chatrooms-survey",
+    element: <ChatroomsSurvey />,
   },
 ]);
 
-
+// 여기에 폰트 추가 가능
 const GlobalStyles = createGlobalStyle`
+
+@font-face {
+        font-family: 'GmarketSansTTFBold';
+        src: local('GmarketSansTTFBold'), local('GmarketSansTTFBold');
+        font-style: normal;
+        src: url(${GmarketSansTTFBold}) format('truetype');
+  }
+  @font-face {
+        font-family: 'GmarketSansTTFMedium';
+        src: local('GmarketSansTTFMedium'), local('GmarketSansTTFMedium');
+        font-style: normal;
+        src: url(${GmarketSansTTFMedium}) format('truetype');
+  }
+  @font-face {
+        font-family: 'GmarketSansTTFLight';
+        src: local('GmarketSansTTFLight'), local('GmarketSansTTFLight');
+        font-style: normal;
+        src: url(${GmarketSansTTFLight}) format('truetype');
+  }
+  @font-face {
+        font-family: 'Jalnan2TTF';
+        src: local('Jalnan2TTF'), local('Jalnan2TTF');
+        font-style: normal;
+        src: url(${Jalnan2TTF}) format('truetype');
+  }
   
   * {
     box-sizing: border-box;
@@ -74,17 +129,15 @@ const GlobalStyles = createGlobalStyle`
   }
 `;
 
-
-const Wrapper =styled.div`
-    height: 100vh;
-    display:flex;
-    overflow-y:hidden;
+const Wrapper = styled.div`
+  height: 100vh;
+  display: flex;
+  overflow-y: hidden;
 `;
 
-
 function App() {
-  const [isLoading, setLoading] =useState(true);
-  const init = async() => {
+  const [isLoading, setLoading] = useState(true);
+  const init = async () => {
     //wait for firebase
     await auth.authStateReady();
     setLoading(false);
@@ -93,11 +146,11 @@ function App() {
   useEffect(() => {
     init();
   }, []);
-  return ( 
-  <Wrapper>
-    <GlobalStyles />
-    {isLoading ? <LoadingScreen /> : <RouterProvider router={router} />}
-  </Wrapper>
+  return (
+    <Wrapper>
+      <GlobalStyles />
+      {isLoading ? <LoadingScreen /> : <RouterProvider router={router} />}
+    </Wrapper>
   );
 }
 
