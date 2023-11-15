@@ -36,7 +36,7 @@ const MBTIBlock = styled.div`
   color: black;
   text-align: center;
   padding: 20px;
-  font-size: 10em;
+  font-size: 7em;
   margin-top: 100px;
 `;
 // 왼쪽 배경
@@ -44,7 +44,7 @@ const Background_left = styled.div`
   background-image: url("/paper_plane.svg");
   background-repeat: no-repeat;
   background-position: center;
-  background-size: 500px;
+  background-size: 70%;
   width: 100%;
   height: 100%;
 `;
@@ -77,8 +77,8 @@ const StyledButton = styled.button`
   border-radius: 30px; // 모서리 둥글게
   cursor: pointer; // 마우스 오버 시 커서 변경
   font-family: "Jalnan2TTF";
-  font-size: 48px; // 폰트 크기
-
+  font-size: 2em; // 폰트 크기
+  margin-bottom: 100px;
   &:hover {
     background-color: #d3a599; // 호버 시 배경색 변경
   }

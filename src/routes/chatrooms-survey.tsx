@@ -1,10 +1,11 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { styled } from "styled-components";
 import "../App.tsx";
 
 // 왼쪽 틀
 const Lay = styled.div`
-  width: 25%;
+  width: 35%;
   border-right: 1.5px solid gray;
   // 가운데 정렬
   display: flex;
@@ -18,7 +19,7 @@ const Divs = styled.div`
   position: fixed;
   top: 0;
   right: 0;
-  width: 75%;
+  width: 65%;
   height: 100%;
   color: black;
   font-size: 20px;
@@ -105,15 +106,15 @@ const questions: Question[] = [
 
 // 질문 틀
 const QuestionFrame = styled.div`
-  padding: 15px; // 안쪽 여백
-  margin-bottom: 10px; // 바깥쪽 여백
-  border-radius: 8px; // 모서리 둥글게
+  //padding: 15px; // 안쪽 여백
+  margin-bottom: 0px; // 바깥쪽 여백
+  //border-radius: 8px; // 모서리 둥글게
 `;
 
 // 질문 제목
 const QuestionTitle = styled.h3`
   font-family: "GmarketSansTTFBold";
-  font-size: 28px; // 폰트 크기
+  font-size: 24px; // 폰트 크기
   color: #333; // 폰트 색상
   margin-left: 30px;
   margin-bottom: 8px; // 제목 아래 여백
@@ -125,7 +126,7 @@ const OptionsContainer = styled.div`
   flex-direction: row; // 가로 방향 배열
   justify-content: start; // 왼쪽 정렬
   margin-left: 50px;
-  margin-top: 30px;
+  margin-top: 1%;
 `;
 
 // 선택지
@@ -133,14 +134,14 @@ const OptionLabel = styled.label`
   display: inline-block; // 블록 레벨 요소로 변경
   margin-right: 70px; // 각 옵션 사이의 여백
   font-family: "GmarketSansTTFMedium";
-  font-size: 24px; // 폰트 크기
+  font-size: 20px; // 폰트 크기
   cursor: pointer; // 마우스 오버 시 커서 변경
 `;
 
 // 선택지 버튼
 const RadioBoxInput = styled.input`
-  width: 20px;
-  height: 20px;
+  width: 15px;
+  height: 15px;
 `;
 
 // 제출하기 버튼
@@ -203,10 +204,11 @@ export default function Survey() {
               </OptionsContainer>
             </QuestionFrame>
           ))}
-          <StyledButton type="submit">제출하기</StyledButton>
+          <Link to="/chat">
+            <StyledButton type="submit">제출하기</StyledButton>
+          </Link>
         </form>
       </Divs>
     </>
   );
 }
-// <StyledButton type="submit">제출하기</StyledButton>로 변경하기

@@ -22,7 +22,7 @@ const MBTIBlock = styled.div`
   color: black;
   text-align: center;
   padding: 20px;
-  font-size: 10em;
+  font-size: 7em;
   margin-top: 100px;
 `;
 // 왼쪽 배경
@@ -30,7 +30,7 @@ const Background_left = styled.div`
   background-image: url("/paper_plane.svg");
   background-repeat: no-repeat;
   background-position: center;
-  background-size: 500px;
+  background-size: 50%;
   width: 100%;
   height: 100%;
 `;
@@ -43,6 +43,7 @@ const Explain = styled.div`
   text-align: center;
   list-style: none;
   line-height: 150%;
+  margin-bottom: 80px;
 `;
 
 // 이미지 + 함께하기 컨테이너
