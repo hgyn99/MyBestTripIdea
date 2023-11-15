@@ -3,6 +3,7 @@ import React, {useState} from "react";
 import { auth, db, storage, } from "../firebase";
 import {addDoc, collection, updateDoc } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+
 const Form = styled.form`
     display: flex;
     flex-direction: row;
@@ -121,6 +122,7 @@ export default function SendMessageForm() {
     const [file, setFile] = useState<File|null>(null);
     const [preview, setPreview] = useState<string | null>(null); // 이미지 미리보기를 위한 상태 변수
     const [isModalOpen, setIsModalOpen] = useState(false);  // 모달 표시 상태 변수
+    
     const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         setMessage(e.target.value);
     }

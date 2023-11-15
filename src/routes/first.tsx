@@ -1,12 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
-import ChatRoomlistTimeline from '../components/chatroomslist-timeline';
 import {Outlet, Link, useNavigate} from "react-router-dom";
 const Background = styled.div`
-  background-image: url('/Cloud.svg'); 
+  background-image: url('/Cloud2.svg'); 
   background-size: cover;
   width: 30%;
   height: 100%;
+  position: fixed; // 고정 위치 설정
+  top: 0; // 상단에서 0의 위치에
+  right: 0; // 오른쪽에서 0의 위치에
 `;
 const TitleContainer = styled.div `
     display: flex;
@@ -27,54 +29,22 @@ const TitleContainer = styled.div `
     font-family: "Gluten", cursive;
 `;
 
-const Chatlist = styled.div `
-  display: flex;
-  justify-content: center;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-30%, -40%);
-  width: 55%; 
-  height: 70%; 
-  flex-direction: column;
-
-`;
-
-const Createchat= styled.div`
-    display: flex; // flex 컨테이너로 설정
-    justify-content: flex-start; // 컨테이너의 시작 지점(상단)으로 정렬
-    align-items: flex-start; // 왼쪽 정렬(수평 방향)
-    color: black;
-    padding: 10px;
-    width: 100%;
-    height:10%;
-`;
 const StyledLink = styled(Link)`
   text-decoration: none; // 밑줄 제거
   color: black; // 텍스트 색상 변경
 `;
 
-const ChatRooms = () => {
+const First = () => {
   
   return (
     <>
     <TitleContainer>
-                MY
+                MBTI
         </TitleContainer>
     <Background/>
-    <Chatlist>
-      <Createchat>
-        채팅방
-        <StyledLink to="/chatadd">
-                    +
-            </StyledLink>
-      </Createchat>
-      <ChatRoomlistTimeline />
-    </Chatlist>
-        
     
     </>
   );
 };
 
-export default ChatRooms;
+export default First;

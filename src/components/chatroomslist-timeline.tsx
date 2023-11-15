@@ -1,7 +1,5 @@
-import { Firestore, Timestamp, Unsubscribe, collection, limit, onSnapshot, orderBy, query } from "firebase/firestore";
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import { db } from "../firebase";
 import axios from 'axios';
 import ChatRoomID from "./chatroomslist-title";
 
@@ -56,7 +54,7 @@ export default function Chatroomlist() {
         const exampleData = {
             id: '1',
             userId: 'user123',
-            title: 'Chat Room Title',
+            title: 'Chat Roomsasa Title',
             status: 'Active',
             username: 'exampleUser'
         };

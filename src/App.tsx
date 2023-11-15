@@ -12,6 +12,8 @@ import { auth } from "./firebase";
 import { styled} from "styled-components";
 import ProtectedRoute from "./components/protected-route";
 import ChatRooms from "./routes/chatrooms";
+import ChatAdd from "./routes/chatadd";
+import First from "./routes/first";
 const router = createBrowserRouter ([
   {
     path:"/",
@@ -24,6 +26,14 @@ const router = createBrowserRouter ([
       {
         path: "profile",
         element: <Profile />,
+      },
+      {
+        path: "chatadd",
+        element: <ChatAdd />,
+      },
+      {
+        path: "first",
+        element: <First/>,
       },
     ],
   },
