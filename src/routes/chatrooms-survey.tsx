@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { auth, db, storage } from "../firebase";
+import { collection, addDoc } from "firebase/firestore";
 import { Link } from "react-router-dom";
 import { styled } from "styled-components";
 import "../App.tsx";
@@ -38,7 +40,7 @@ const MBTIBlock = styled.div`
   color: black;
   text-align: center;
   padding: 20px;
-  font-size: 10em;
+  font-size: 100px;
 `;
 
 // 설문조사 설명
@@ -168,10 +170,22 @@ export default function Survey() {
     setAnswers({ ...answers, [questionId]: option });
   };
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    const user = auth.currentUser;
+    // Firestore에 데이터 저장
+    try {
+      const doc = await addDoc(collection(db, "travel_survey_answers"), {
+        createdAt: Date.now(),
+        username: user?.displayName || "Anonymous",
+        userId: user?.uid,
+        time: new Date(),
+        answers: answers,
+      });
+    } catch (error) {
+      console.error("Error adding document: ", error);
+    }
     console.log("Submitted Answers:", answers);
-    // 여기서 서버로 답변을 전송하거나 다른 처리를 할 수 있습니다.
   };
 
   return (
@@ -204,9 +218,7 @@ export default function Survey() {
               </OptionsContainer>
             </QuestionFrame>
           ))}
-          <Link to="/chat">
-            <StyledButton type="submit">제출하기</StyledButton>
-          </Link>
+          <StyledButton type="submit">제출하기</StyledButton>
         </form>
       </Divs>
     </>

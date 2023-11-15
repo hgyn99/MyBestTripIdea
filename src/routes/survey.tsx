@@ -1,7 +1,9 @@
-import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { styled } from "styled-components";
 import "../App.tsx";
+import { collection, addDoc, updateDoc, doc } from "firebase/firestore";
+import { useState, useEffect } from "react";
+import styled from "styled-components";
+import { auth, db, storage } from "../firebase";
 
 // 왼쪽 틀
 const Lay = styled.div`
@@ -156,10 +158,22 @@ export default function Survey() {
     setAnswers({ ...answers, [questionId]: option });
   };
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    const user = auth.currentUser;
+    // Firestore에 데이터 저장
+    try {
+      const doc = await addDoc(collection(db, "personal_survey_answers"), {
+        createdAt: Date.now(),
+        username: user?.displayName || "Anonymous",
+        userId: user?.uid,
+        time: new Date(),
+        answers: answers,
+      });
+    } catch (error) {
+      console.error("Error adding document: ", error);
+    }
     console.log("Submitted Answers:", answers);
-    // 여기서 서버로 답변을 전송하거나 다른 처리를 할 수 있습니다.
   };
 
   return (
@@ -193,9 +207,8 @@ export default function Survey() {
               </OptionsContainer>
             </QuestionFrame>
           ))}
-          <Link to="/chat">
-            <StyledButton type="submit">제출하기</StyledButton>
-          </Link>
+
+          <StyledButton type="submit">제출하기</StyledButton>
         </form>
       </Divs>
     </>
