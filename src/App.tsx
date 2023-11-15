@@ -1,5 +1,5 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Layout from "./components/layout";
+import Navigation from "./components/navigation";
 import Home from "./routes/home";
 import Profile from "./routes/profile";
 import Login from "./routes/login";
@@ -12,6 +12,9 @@ import { auth } from "./firebase";
 import { styled } from "styled-components";
 import ProtectedRoute from "./components/protected-route";
 import ChatRooms from "./routes/chatrooms";
+
+import Intro from "./routes/intro";
+
 import Survey from "./routes/survey";
 import ChatroomsSurvey from "./routes/chatrooms-survey";
 // 폰트 추가
@@ -19,26 +22,36 @@ import GmarketSansTTFBold from "./fonts/GmarketSansTTFBold.ttf";
 import GmarketSansTTFMedium from "./fonts/GmarketSansTTFMedium.ttf";
 import GmarketSansTTFLight from "./fonts/GmarketSansTTFLight.ttf";
 import Jalnan2TTF from "./fonts/Jalnan2TTF.ttf";
+import Layout from "./components/chatlayout";
 
 const router = createBrowserRouter([
-  /*{
-    path:"/",
-    element: <ProtectedRoute><Layout /></ProtectedRoute>,
+  {
+    path: "/",
+    element: (
+      <ProtectedRoute>
+        <Intro />
+      </ProtectedRoute>
+    ),
     children: [
       {
-        path: "",
-        element: <Home />,
+        path: "chatrooms",
+        element: <ChatRooms />,
       },
       {
         path: "profile",
         element: <Profile />,
       },
-      {
-        path: "chat",
-        element: <Chat />,
-      },
     ],
-  },*/
+  },
+  {
+    path: "/login",
+    element: <Login />,
+  },
+  { path: "/create-account", element: <CreateAccount /> },
+  {
+    path: "",
+    element: <Home />,
+  },
   {
     path: "/login",
     element: <Login />,

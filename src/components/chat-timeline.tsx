@@ -26,11 +26,11 @@ export interface IMessage {
 
 // height = 465px -> calc(100vh - 250px) 변경 -> 반응형?
 const Wrapper = styled.div`
-    display: flex;
-    flex-direction: column-reverse;
-    overflow-y: auto; // 스크롤 가능하게 합니다.
-    height: 100%;
-    overflow-x: hidden;
+  display: flex;
+  flex-direction: column-reverse;
+  overflow-y: auto; // 스크롤 가능하게 합니다.
+  height: 100%;
+  overflow-x: hidden;
 
   &::-webkit-scrollbar {
     display: none;

@@ -6,8 +6,7 @@ export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 420px;
-  padding: 50px 0px;
+  width: 40%;
 `;
 
 // 제목 css - 제목 내용은 없는듯
@@ -21,6 +20,7 @@ export const Form = styled.form`
   margin-bottom: 10px;
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 10px;
   width: 100%;
 `;
@@ -30,7 +30,7 @@ export const Input = styled.input`
   padding: 10px 20px;
   border-radius: 50px;
   border: none;
-  width: 100%;
+  width: 350px;
   font-size: 16px;
   &[type="submit"] {
     cursor: pointer;
