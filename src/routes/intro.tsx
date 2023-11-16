@@ -72,12 +72,14 @@ const MBTIContainer = styled.div`
 const StyledButton = styled.button`
   background-color: #f2bdaf; // 배경색
   color: black; // 텍스트 색상
-  padding: 30px 60px; // 안쪽 여백
+  padding: 20px 40px; // 안쪽 여백
   border: none; // 테두리 없음
   border-radius: 30px; // 모서리 둥글게
+  width: 100%;
+  height: 40%;
   cursor: pointer; // 마우스 오버 시 커서 변경
   font-family: "Jalnan2TTF";
-  font-size: 2em; // 폰트 크기
+  font-size: 1.5rem; // 폰트 크기
   margin-bottom: 100px;
   &:hover {
     background-color: #d3a599; // 호버 시 배경색 변경
