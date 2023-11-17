@@ -15,14 +15,15 @@ import ChatRooms from "./routes/chatrooms";
 import ChatAdd from "./routes/chatadd";
 import Intro from "./routes/intro";
 import Survey from "./routes/survey";
+import History from "./routes/history";
 import ChatroomsSurvey from "./routes/chatrooms-survey";
 // 폰트 추가
 import GmarketSansTTFBold from "./fonts/GmarketSansTTFBold.ttf";
 import GmarketSansTTFMedium from "./fonts/GmarketSansTTFMedium.ttf";
 import GmarketSansTTFLight from "./fonts/GmarketSansTTFLight.ttf";
 import Jalnan2TTF from "./fonts/Jalnan2TTF.ttf";
-import Layout from "./components/chatlayout";
-
+import React from 'react';
+import { ChatRoomProvider } from './components/ChatRoomContext';
 const router = createBrowserRouter([
   {
     path: "/",
@@ -47,6 +48,10 @@ const router = createBrowserRouter([
       {
         path: "",
         element: <Intro />,
+      },
+      {
+        path: "History",
+        element: <History />,
       },
     ],
   },
@@ -75,10 +80,6 @@ const router = createBrowserRouter([
   {
     path: "chat",
     element: <Chat />,
-  },
-  {
-    path: "chatrooms",
-    element: <ChatRooms />,
   },
   {
     path: "survey",
@@ -147,10 +148,12 @@ function App() {
     init();
   }, []);
   return (
-    <Wrapper>
-      <GlobalStyles />
-      {isLoading ? <LoadingScreen /> : <RouterProvider router={router} />}
-    </Wrapper>
+    <ChatRoomProvider> {/* ChatRoomProvider 추가 */}
+      <Wrapper>
+        <GlobalStyles />
+        {isLoading ? <LoadingScreen /> : <RouterProvider router={router} />}
+      </Wrapper>
+    </ChatRoomProvider>
   );
 }
 

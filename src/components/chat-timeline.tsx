@@ -7,12 +7,14 @@ import {
   onSnapshot,
   orderBy,
   query,
+  where,
 } from "firebase/firestore";
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { db } from "../firebase";
 import Message from "./chat-message";
-
+import React, { useContext } from 'react';
+import { ChatRoomContext } from './ChatRoomContext';
 //메시지 타임라인, 즉 틀 이야기하는 거
 export interface IMessage {
   id: string;
@@ -22,6 +24,7 @@ export interface IMessage {
   username: string;
   createdAt: number;
   time: Timestamp;
+  chatroomId: number;
 }
 
 // height = 465px -> calc(100vh - 250px) 변경 -> 반응형?
@@ -42,20 +45,22 @@ const Wrapper = styled.div`
 
 export default function Timeline() {
   const [messages, setMessage] = useState<IMessage[]>([]);
+  const { chatroomId } = useContext(ChatRoomContext);
 
   useEffect(() => {
     let unsubscribe: Unsubscribe | null = null;
     const fetchMessages = async () => {
-      const messagesQuery = query(
-        collection(db, "messages"),
-        orderBy("createdAt", "desc")
-      );
+      const q = collection(db, "messages");
+
+      console.log("챗룸아이디 입력됨");
+      console.log(chatroomId);
+      //여기 부분 쿼리 두개가 안먹음. orderby를 빼면 챗룸아이디 별로 채팅이 나오는데, 시간 순서가 안맞음
+      const messagesQuery = query(q, where("chatroomId", "==", chatroomId), orderBy("createdAt", "desc"));
 
       unsubscribe = await onSnapshot(messagesQuery, (snapshot) => {
         const messages = snapshot.docs.map((doc) => {
-          const { message, createdAt, userId, username, photo, time } =
-            doc.data();
-          return {
+          const { message, createdAt, userId, username, photo, time, chatroomId } = doc.data();
+          return {  
             message,
             createdAt,
             userId,
@@ -63,16 +68,21 @@ export default function Timeline() {
             photo,
             id: doc.id,
             time,
+            chatroomId,
           };
         });
+
+        console.log(messages); // 임시로 콘솔에 결과를 출력합니다.
         setMessage(messages);
       });
     };
+
     fetchMessages();
+
     return () => {
       unsubscribe && unsubscribe();
     };
-  }, []);
+  }, [chatroomId]); // 의존성 배열에 chatroomId를 추가합니다.
 
   return (
     <Wrapper>

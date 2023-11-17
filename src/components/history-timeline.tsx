@@ -1,36 +1,41 @@
-import { useState, useEffect,createContext, useMemo,Dispatch, SetStateAction } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import axios from "axios";
-import ChatRoom from "./chatroomslist-title";
 
+import HistoryID from "./history";
 
-
-export interface ChatRoom {
-  chatroomId: number;
+export interface HistoryID {
+  id: string;
   userId: string;
   title: string;
-  status: string;
-  username: string;
 }
-
 const Wrapper = styled.div`
   display: flex;
-  overflow-y: auto; // 스크롤 가능하게 합니다.
-  flex-direction: column;
-  height: 80%;
+  flex-wrap: wrap;
+  overflow-y: auto;
+  height: 90%;
   width: 100%;
-  overflow-x: hidden;
+
+  & > div {
+    flex: 0 0 45%;
+    box-sizing: border-box;
+    padding: 10px;
+    border: 3px solid black;
+    margin: 10px; // 마진 추가
+    height:50%;
+    width:100%;
+    border-radius:10px;
+    position:relative
+  }
+
   &::-webkit-scrollbar {
     display: none;
   }
-
-  /* Firefox */
   scrollbar-width: none;
 `;
 
-
 export default function Chatroomlist() {
-  const [chatRoomId, setChatRoomId] = useState<ChatRoom[]>([]);
+  const [historyID, setHistoryID] = useState<HistoryID[]>([]);
   useEffect(() => {
     const token = localStorage.getItem("userToken"); // 예시: 로컬 스토리지에서 토큰 가져오기
 
@@ -39,57 +44,60 @@ export default function Chatroomlist() {
       console.log("No token found");
       return;
     }
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
+
     axios
-      .get("http://localhost:8080/api/v1/chatrooms", config)
+      .get("")
       .then((res) => {
-        setChatRoomId(res.data);
+        setHistoryID(res.data);
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
   const exampleData = {
-    chatroomId: 1,
+    id: "1",
     userId: "user123",
     title: "Chat Roomsasa Title",
-    status: "참여하기",
+    status: "성향 조사",
     username: "exampleUser",
   };
   const exampleData2 = {
-    chatroomId: 2,
+    id: "2",
     userId: "user123",
     title: "Chat Room Titless",
-    status: "참여하기",
+    status: "대기 중",
     username: "exampleUser",
   };
   const exampleData3 = {
-    chatroomId: 2,
+    id: "2",
     userId: "user123",
     title: "Chat Room Titless",
     status: "참여하기",
     username: "exampleUser",
   };
   const exampleData4 = {
-    chatroomId: 3,
+    id: "2",
     userId: "user123",
     title: "Chat Room Titless",
     status: "참여하기",
     username: "exampleUser",
   };
   const exampleData5 = {
-    chatroomId: 4,
+    id: "2",
     userId: "user123",
     title: "Chat Room Titless",
-    status: "참여하기",
+    status: "성향 조사",
     username: "exampleUser",
   };
   const exampleData6 = {
-    chatroomId: 6,
+    id: "2",
+    userId: "user123",
+    title: "Chat Room Titless",
+    status: "대기 중",
+    username: "exampleUser",
+  };
+  const exampleData7 = {
+    id: "2",
     userId: "user123",
     title: "Chat Room Titless",
     status: "대기 중",
@@ -97,16 +105,30 @@ export default function Chatroomlist() {
   };
 
   return (
-  
     <Wrapper>
-      <ChatRoom {...exampleData} />
-      <ChatRoom {...exampleData2} />
-      <ChatRoom {...exampleData3} />
-      <ChatRoom {...exampleData4} />
-      <ChatRoom {...exampleData5} />
-      <ChatRoom {...exampleData6} />
-      {chatRoomId.map((chatroom) => (
-        <ChatRoom key={chatroom.chatroomId} {...chatroom} />
+      <div>
+      <HistoryID {...exampleData} />
+        </div>
+        <div>
+      <HistoryID {...exampleData2} />
+        </div>
+        <div>
+      <HistoryID {...exampleData3} />
+        </div>
+        <div>
+      <HistoryID {...exampleData4} />
+        </div>
+        <div>
+      <HistoryID {...exampleData5} />
+        </div>
+        <div>
+      <HistoryID {...exampleData6} />
+        </div>
+        <div>
+      <HistoryID {...exampleData7} />
+        </div>
+      {historyID.map((history) => (
+        <HistoryID key={history.id} {...history} />
       ))}
     </Wrapper>
   );

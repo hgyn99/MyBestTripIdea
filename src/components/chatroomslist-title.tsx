@@ -1,8 +1,9 @@
 
-import { ChatRoomID } from "./chatroomslist-timeline";
+import { ChatRoom } from "./chatroomslist-timeline";
 import styled from "styled-components";
-import react, {useState} from "react";
-
+import React, { createContext, useContext, useState } from "react";
+import {  useNavigate } from "react-router-dom";
+import { ChatRoomContext } from './ChatRoomContext';
 const Wrapper = styled.div`
     display:flex;
     color:black;
@@ -16,31 +17,84 @@ const Wrapper = styled.div`
 const Title = styled.div`
     border-bottom: 2px solid #B5E2E9;
     width:80%;
+    font-family: "Jalnan2TTF";
     `;
 
-const Status = styled.div`
-    margin-left: 10px; // title과의 간격
-    border: 1px solid black; // 테두리
-    border-radius: 40%; // 원형
-    padding: 5px; // 패딩
-    text-align: center; // 텍스트 중앙 정렬
+
+type StatusProps = {
+    status: string;
+    };
+const getStatusColor = (status: string): string => {
+        switch (status) {
+            case "대기 중":
+                return "#F4F1F3";
+            case "성향 조사":
+                return "#F2BDAF";
+            case "참여하기":
+                return "#B5E2E9";
+            default:
+                return "#f2bdaf";
+        }
+    };
+const Status = styled.div<StatusProps>`
+    background-color: ${props => getStatusColor(props.status)};
+    color: black;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 30px;
+    font-family: "Jalnan2TTF";
+    width: 100px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 `;
 
-export default function ChatRoom({ id, userId, title, status, username  }: ChatRoomID) {
-    const [user, setUser] = useState(null);
-    const authenticated = user != null;
+const ParticipateButton = styled.button<StatusProps>`
+    // 버튼 스타일
+    background-color: ${props => getStatusColor(props.status)};
+    color: black;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 30px;
+    font-family: "Jalnan2TTF";
+    width: 100px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    &:hover {
+        background-color: #a2cbd1; // 호버 시 배경색 변경
+      } 
+`;
+
+
+
+export default function ChatRoom({ chatroomId, userId, title, status, username  }: ChatRoom) {
+    const { setChatroomId } = useContext(ChatRoomContext);
+    const navigate = useNavigate();
+    
+    const handleJoinChat = () => {
+        setChatroomId(chatroomId);
+        console.log("채팅방에 참여합니다!");
+        console.log(chatroomId);
+        navigate(`/chat`);
+    };
 
     return (
-        <>
             <Wrapper>
-                <Title>
-                {title}
-                </Title>
-                <Status>
-                {status}
-                </Status>
+                <Title>{title}</Title>
+                {status === "참여하기" ? (
+                    <ParticipateButton status={status} onClick={handleJoinChat}>
+                        {status}
+                    </ParticipateButton>
+                ) : (
+                    <Status status={status}>
+                        {status}
+                    </Status>
+                )}
             </Wrapper>
-        </>
     );
     
 }   

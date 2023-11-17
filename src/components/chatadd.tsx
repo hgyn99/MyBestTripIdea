@@ -9,7 +9,7 @@ const Form = styled.form`
     background-color: white;
     flex-direction: column;
     color:black;
-    font-family: 'AbeeZee', sans-serif;
+    font-family: "Jalnan2TTF";
     font: bold;
 `;
 //채팅치는 코드
@@ -32,21 +32,20 @@ const TextArea = styled.input`
 
 const SubmitBtn = styled.button`
 
-    cursor: pointer;
+    background-color: #B5E2E9;
+    color: black;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 30px;
+    font-family: "Jalnan2TTF";
+    width: 100px;
+    height: 30px;
     display: flex;
-    align-items:center;
-    justify-content: left;
-    height:10px;
-    width:100%;
-    background-color: white;
-    border: 1px solid black;
-    border:none;
+    align-items: center;
+    justify-content: center;
 `;
 
 export default function ChatAddForm() {
-
-
-    const baseUrl = "http://localhost:8080";
     const [title, setTitle] = useState("");
     const [spot, setSpot] = useState("");
     const [headcount, setHeadcount] = useState("");
@@ -90,7 +89,7 @@ export default function ChatAddForm() {
             }
         };
         
-        axios.post('여기에_API_URL', {
+        axios.post('http://localhost:8080/api/v1/chatrooms', {
             title: title,
             spot: spot,
             headcount: headcount,
