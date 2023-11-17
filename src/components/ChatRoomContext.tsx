@@ -1,21 +1,21 @@
-import React, { createContext, useState, ReactNode } from 'react';
+import React, { createContext, useState, ReactNode } from "react";
 
 interface ChatRoomContextType {
-  chatroomId: number | null;
+  chatRoomId: number | null;
   setChatroomId: React.Dispatch<React.SetStateAction<number | null>>;
 }
 
 // 기본값에 타입을 지정합니다.
 export const ChatRoomContext = createContext<ChatRoomContextType>({
-  chatroomId: null,
-  setChatroomId: () => {}
+  chatRoomId: null,
+  setChatroomId: () => {},
 });
 
 export const ChatRoomProvider = ({ children }: { children: ReactNode }) => {
-  const [chatroomId, setChatroomId] = useState<number | null>(null);
+  const [chatRoomId, setChatroomId] = useState<number | null>(null);
 
   return (
-    <ChatRoomContext.Provider value={{ chatroomId, setChatroomId }}>
+    <ChatRoomContext.Provider value={{ chatRoomId, setChatroomId }}>
       {children}
     </ChatRoomContext.Provider>
   );
