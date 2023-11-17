@@ -4,6 +4,7 @@ import { collection, addDoc, updateDoc, doc } from "firebase/firestore";
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { auth, db, storage } from "../firebase";
+import Survey_test from "./survey_test.tsx";
 
 // 왼쪽 틀
 const Lay = styled.div`
@@ -186,7 +187,7 @@ export default function Survey() {
         </Survey_explain>
       </Lay>
       <Divs>
-        {" "}
+        {/* {" "}
         <form onSubmit={handleSubmit}>
           {questions.map((question) => (
             <QuestionFrame key={question.id}>
@@ -209,7 +210,8 @@ export default function Survey() {
           ))}
 
           <StyledButton type="submit">제출하기</StyledButton>
-        </form>
+        </form> */}
+        <Survey_test />
       </Divs>
     </>
   );
