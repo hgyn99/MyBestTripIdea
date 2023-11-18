@@ -49,9 +49,71 @@ const DayButton = styled.button`
   cursor: pointer;
 `;
 
+const Divs = styled.div`
+  //position: fixed;
+  top: 0;
+  right: 0;
+  height: 100%;
+  color: black;
+  font-size: 20px;
+  // 가운데 정렬
+  display: flex;
+  flex-direction: row;
+  //justify-content: center; // 수직 가운데 정렬
+  //align-items: center; // 수평 가운데 정렬
+`;
+
+const DayPlanItem = styled.li`
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+`;
+
+const SatisfactionRadio = styled.div`
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
+
+  label {
+    margin: 0 10px;
+    font-size: 1em;
+    color: #333;
+    display: flex;
+    align-items: center;
+  }
+
+  input[type="radio"] {
+    vertical-align: middle;
+    appearance: none;
+  }
+
+  // 커스텀 라디오 버튼 디자인
+  input[type="radio"]:after {
+    width: 15px;
+    height: 15px;
+    transition: border 0.5s ease-in-out;
+    border-radius: 15px;
+    position: relative;
+    background-color: white;
+    content: "";
+    display: inline-block;
+    visibility: visible;
+    border: max(2px, 0.1em) solid gray;
+  }
+
+  input[type="radio"]:checked:after {
+    background-color: #f86480;
+  }
+  input[type="radio"]:hover {
+    cursor: pointer;
+  }
+`;
+
 export default function Layout() {
   const navigate = useNavigate();
   const [day, setDay] = useState(1);
+  const [satisfaction, setSatisfaction] = useState({});
+
   const onLogOut = async () => {
     const ok = confirm("Are you sure you want to log out?");
     if (ok) {
@@ -148,16 +210,41 @@ export default function Layout() {
       <MBTIBlock>
         <MBTIBlock>MBTI</MBTIBlock>
       </MBTIBlock>
+
       <DayPlanContainer>
         <DayButton onClick={handlePrevDay}>&lt;</DayButton>
         {day}일차
         <DayButton onClick={handleNextDay}>&gt;</DayButton>
         <ul>
-          <li>1일차 여행 추천지1</li>
-          <li>1일차 여행 추천지2</li>
-          <li>1일차 여행 추천지3</li>
-          <li>1일차 여행 추천지4</li>
-          <li>1일차 여행 추천지5</li>
+          {[
+            "여행 추천지1",
+            "여행 추천지2",
+            "여행 추천지3",
+            "여행 추천지4",
+            "여행 추천지5",
+          ].map((destination, index) => (
+            <DayPlanItem key={index}>
+              {day}일차 {destination}
+              <SatisfactionRadio>
+                <label>
+                  만족
+                  <input
+                    type="radio"
+                    name={`satisfaction-${destination}`}
+                    value="satisfied"
+                  />
+                </label>
+                <label>
+                  불만족
+                  <input
+                    type="radio"
+                    name={`satisfaction-${destination}`}
+                    value="unsatisfied"
+                  />
+                </label>
+              </SatisfactionRadio>
+            </DayPlanItem>
+          ))}
         </ul>
       </DayPlanContainer>
     </>

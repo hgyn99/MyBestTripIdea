@@ -97,7 +97,7 @@ export default function Message({
   userId,
   id,
   time,
-  chatroomId,
+  chatRoomId,
 }: IMessage) {
   const user = auth.currentUser;
   const [showModal, setShowModal] = useState(false);

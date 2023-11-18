@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 interface Question {
   id: number;
@@ -7,48 +8,30 @@ interface Question {
   selectedOption: string;
 }
 
-const questionTexts = [
-  "나는 여행지에서 문화와 역사적인 장소를 방문하는 것을 좋아한다.",
-  "나는 여행 중에 스포츠나 레저 활동을 즐기는 것을 선호한다.",
-  "나는 여행지에서 휴식과 힐링을 중요하게 생각한다.",
-  "나는 여행 중에 쇼핑을 즐기는 편이다.",
-  "나는 여행지에서 자연과 경치를 감상하는 것을 좋아한다.",
-  "나는 여행 중에 현지인과의 교류를 중요하게 생각한다.",
-  "나는 여행지에서 야간 활동과 야경을 즐기는 편이다.",
-  "나는 여행 중에 예술과 공연을 감상하는 것을 선호한다.",
-  "나는 여행지에서 도전적인 활동을 시도하는 것을 좋아한다.",
-  "나는 여행 중에 현지 전통과 문화를 체험하는 것을 선호한다.",
-  "나는 여행지에서 도시보다 시골을 더 선호한다.",
-  "나는 여행 중에 혼자 시간을 보내는 것을 선호한다.",
-  "나는 여행지에서 모험과 탐험을 중요하게 생각한다.",
-  "나는 여행지에서 현지인의 일상생활을 체험하는 것을 좋아한다.",
-  "나는 여행 중에 음악과 춤을 즐기는 것을 선호한다.",
-  "나는 여행지에서 역사적인 장소보다 현대적인 장소를 더 선호한다.",
-  "나는 여행 중에 스파나 마사지를 받는 것을 선호한다.",
-  "나는 여행지에서 미술관이나 박물관을 방문하는 것을 좋아한다.",
-  "나는 여행 중에 지역 페스티벌이나 이벤트에 참여하는 것을 선호한다.",
-  "나는 여행지에서 해변이나 바다 활동을 즐기는 것을 좋아한다.",
-];
-
-const questionsData: Question[] = questionTexts.map((text, index) => ({
-  id: index + 1,
-  text: text,
-  options: [
-    "STRONGLY AGREE",
-    "AGREE",
-    "NEUTRAL",
-    "DISAGREE",
-    "STRONGLY DISAGREE",
-  ],
-  selectedOption: "",
-}));
-
 const QUESTIONS_PER_PAGE = 5;
-const TOTAL_PAGES = questionsData.length / QUESTIONS_PER_PAGE;
 
 const Survey_test: React.FC = () => {
-  const [questions, setQuestions] = useState(questionsData);
+  const [questions, setQuestions] = useState<Question[]>([]);
   const [currentPage, setCurrentPage] = useState(0);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:3000/api/v1/members/survey/1")
+      .then((response) => {
+        const loadedQuestions = response.data.map(
+          (item: any, index: number) => ({
+            id: index + 1,
+            text: item.questions,
+            options: item.answers,
+            selectedOption: item.selectedAnswer,
+          })
+        );
+        setQuestions(loadedQuestions);
+      })
+      .catch((error) => {
+        console.error("Error fetching data: ", error);
+      });
+  }, []);
 
   const handleAnswerChange = (questionId: number, selectedOption: string) => {
     const updatedQuestions = questions.map((question) =>
@@ -56,6 +39,11 @@ const Survey_test: React.FC = () => {
     );
     setQuestions(updatedQuestions);
   };
+
+  const TOTAL_PAGES = 4;
+  //const TOTAL_PAGES = Math.ceil(questions.length / QUESTIONS_PER_PAGE);
+  //console.log("questions.length: " + questions.length);
+  //console.log("QUESTIONS_PER_PAGE: " + QUESTIONS_PER_PAGE);
 
   const isPageComplete = () => {
     const startIndex = currentPage * QUESTIONS_PER_PAGE;
@@ -70,13 +58,38 @@ const Survey_test: React.FC = () => {
   );
 
   const handleSubmit = () => {
-    // 모든 답변이 완료되었을 때 수행할 동작
-    const submittedAnswers = questions.map(({ id, selectedOption }) => ({
-      id,
-      selectedOption,
-    }));
-    console.log("제출된 답변:", submittedAnswers); // 모든 항목을 전송하려면 questions, 특정 항목만 전송하려면 submittedAnswers
+    // const submittedAnswers = questions.map(({ id, selectedOption }) => ({
+    //   id,
+    //   selectedOption,
+    // }));
+
+    // console.log("제출된 답변:", submittedAnswers);
     // 여기에 서버로 데이터 전송하는 로직을 추가할 수 있습니다.
+
+    // 모든 선택된 옵션을 하나의 문자열로 결합
+    const surveyResult = questions
+      .map((question) => question.selectedOption)
+      .join(",");
+    console.log("surveyResult: ", surveyResult); // 이 로그를 통해 surveyResult의 내용을 확인
+
+    // 데이터를 서버에 POST
+    axios
+      .post(
+        "http://localhost:3000/api/v1/members/survey/1",
+        JSON.stringify({ surveyResult }), // 데이터를 JSON 문자열로 변환
+        {
+          headers: {
+            "Content-Type": "application/json", // 헤더에 Content-Type 설정
+          },
+        }
+      )
+      .then((response) => {
+        console.log("서버 응답:", response);
+        // 성공적으로 제출되었을 때의 추가 동작(옵션)
+      })
+      .catch((error) => {
+        console.error("Error posting data: ", error);
+      });
   };
 
   const handleNextPage = () => {
