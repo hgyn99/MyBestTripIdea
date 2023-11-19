@@ -35,11 +35,10 @@ const Wrapper = styled.div`
 `;
 
 export default function Chatroomlist() {
-  const [chatRooms, setChatRooms] = useState<ChatRoom[]>([]); // 상태 변수 이름 변경
-  //const [chatRoomId, setChatRoomId] = useState<ChatRoom[]>([]);
+  const [chatRooms, setChatRooms] = useState<ChatRoom[]>([]);
   const { accessToken } = useContext(AccessTokenContext);
+
   useEffect(() => {
-    // 토큰이 없다면 추가 작업을 하지 않고 함수를 종료
     if (!accessToken) {
       console.log("No token found");
       return;
@@ -49,17 +48,16 @@ export default function Chatroomlist() {
         Authorization: `Bearer ${accessToken}`,
       },
     };
+    console.log(accessToken);
     axios
-      //.get("http://localhost:4000/api/v1/chatrooms", config)
       .get("http://44.218.133.175:8080/api/v1/chatrooms", config)
       .then((res) => {
-        setChatRooms(res.data);
-        // 서버에 있는 테스트 데이터 제외하고 필터링된 데이터 확인
+        setChatRooms(res.data); // 여기를 수정합니다. res.data는 서버 응답에 따라 다를 수 있습니다.
       })
       .catch((err) => {
         console.log(err);
       });
-  }, [accessToken]);
+  }, [accessToken]); // accessToken을 의존성 배열에 추가합니다.
 
   return (
     <Wrapper>
