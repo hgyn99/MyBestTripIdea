@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { auth } from "../firebase";
 import { Link, useNavigate } from "react-router-dom";
 import { FirebaseError } from "firebase/app";
@@ -13,7 +13,8 @@ import {
 } from "../components/auth-components";
 import GithubButton from "../components/github-btn";
 import styled from "styled-components";
-
+import axios from "axios";
+import { AccessTokenContext } from "../components/TokenContext";
 // MBTI 박스를 위한 스타일
 const MBTIBlock = styled.div`
   align-items: center;
@@ -95,7 +96,21 @@ export default function CreateAccount() {
     if (isLoading || email === "" || password === "") return;
     try {
       setLoading(true);
-      await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+      const response = await axios.post(
+        "http://44.218.133.175:8080/api/v1/members/login",
+        {
+          email,
+          password,
+        } 
+      );
+      const { setAccessToken } = useContext(AccessTokenContext);
+      setAccessToken(response.data.data.token.accessToken);
       navigate("/survey");
     } catch (e) {
       if (e instanceof FirebaseError) {

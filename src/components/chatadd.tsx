@@ -1,7 +1,8 @@
 import { styled } from "styled-components";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import axios from "axios";
-
+import { AccessTokenContext } from "./TokenContext";
+//초대 /갱신동의 거부 / 타이틀/ 여행일정 /
 const Form = styled.form`
   display: flex;
   gap: 10px;
@@ -70,19 +71,19 @@ export default function ChatAddForm() {
   const onChange_password = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   };
-
+  const { accessToken } = useContext(AccessTokenContext);
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const token = localStorage.getItem("userToken"); // 예시: 로컬 스토리지에서 토큰 가져오기
-    console.log(token);
+
+    //console.log(accessToken);
     // 토큰이 없다면 추가 작업을 하지 않고 함수를 종료
-    // if (!token) {
-    //     console.log('No token found');
-    //     return;
-    // }
+    if (!accessToken) {
+      console.log("No token found");
+      return;
+    }
     const config = {
       headers: {
-        Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6MSwibWVtYmVyUm9sZSI6IltST0xFX1VTRVJdIiwiaWF0IjoxNzAwMzkxMTA4LCJleHAiOjE3MzE5NDg3MDh9.6fpj2GP-x0m_DZ1mT6wCyhoOtCuVFdkB539B-Pyt07M`,
+        Authorization: `Bearer ${accessToken}`,
       },
     };
 

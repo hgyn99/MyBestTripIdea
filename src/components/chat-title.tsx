@@ -1,6 +1,9 @@
 import { styled } from "styled-components";
-import { useState } from "react";
-
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { ChatRoomContext } from "./ChatRoomContext";
+import { useContext } from "react";
+import { AccessTokenContext } from "./TokenContext";
 //title은 추가해야 함 채팅방 맨 위를 가리키는 거
 //메시지 룸 추가하면서 채팅방 이름 갖게되면 그거에 따라 div에 출력하도록 해야함
 const Title = styled.div`
@@ -17,5 +20,32 @@ const Title = styled.div`
 `;
 
 export default function SendMessageForm() {
-  return <Title />;
+  const { chatRoomId } = useContext(ChatRoomContext);
+  const [title, setTitle] = useState("");
+  useEffect(() => {
+    const { accessToken } = useContext(AccessTokenContext);
+    // 토큰이 없다면 추가 작업을 하지 않고 함수를 종료
+    if (!accessToken) {
+      console.log("No token found");
+      return;
+    }
+    const config = {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    };
+    axios
+      .get(
+        "http://44.218.133.175:8080/api/v1/chatrooms/${chatroomId}/title",
+        config
+      )
+      .then((res) => {
+        setTitle(res.data.title);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [chatRoomId]);
+
+  return <Title>{title}</Title>;
 }

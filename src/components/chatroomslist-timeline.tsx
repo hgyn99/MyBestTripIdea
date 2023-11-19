@@ -5,11 +5,12 @@ import {
   useMemo,
   Dispatch,
   SetStateAction,
+  useContext,
 } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import ChatRoom from "./chatroomslist-title";
-
+import { AccessTokenContext } from "./TokenContext";
 export interface ChatRoom {
   chatRoomId: number;
   userId: string;
@@ -36,27 +37,24 @@ const Wrapper = styled.div`
 export default function Chatroomlist() {
   const [chatRooms, setChatRooms] = useState<ChatRoom[]>([]); // 상태 변수 이름 변경
   //const [chatRoomId, setChatRoomId] = useState<ChatRoom[]>([]);
+  const { accessToken } = useContext(AccessTokenContext);
   useEffect(() => {
-    const token = localStorage.getItem("userToken"); // 예시: 로컬 스토리지에서 토큰 가져오기
-
     // 토큰이 없다면 추가 작업을 하지 않고 함수를 종료
-    // if (!token) {
-    //   console.log("No token found");
-    //   return;
-    // }
+    if (!accessToken) {
+      console.log("No token found");
+      return;
+    }
     const config = {
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${accessToken}`,
       },
     };
     axios
-      .get("http://localhost:4000/api/v1/chatrooms", config)
+      //.get("http://localhost:4000/api/v1/chatrooms", config)
+      .get("http://44.218.133.175:8080/api/v1/chatrooms", config)
       .then((res) => {
-        const filteredChatRooms = res.data.filter(
-          (chatroom: ChatRoom) => chatroom.chatRoomId >= 1
-        );
-        setChatRooms(filteredChatRooms);
-        console.log(filteredChatRooms); // 서버에 있는 테스트 데이터 제외하고 필터링된 데이터 확인
+        setChatRooms(res.data);
+        // 서버에 있는 테스트 데이터 제외하고 필터링된 데이터 확인
       })
       .catch((err) => {
         console.log(err);
