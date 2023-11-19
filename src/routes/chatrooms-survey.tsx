@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { auth, db, storage } from "../firebase";
 import { collection, addDoc } from "firebase/firestore";
-import { Link } from "react-router-dom";
+import { Link, redirect } from "react-router-dom";
 import { styled } from "styled-components";
 import "../App.tsx";
 
@@ -218,7 +218,9 @@ export default function Survey() {
               </OptionsContainer>
             </QuestionFrame>
           ))}
-          <StyledButton type="submit">제출하기</StyledButton>
+          <Link to="/chat">
+            <StyledButton type="submit">제출하기</StyledButton>
+          </Link>
         </form>
       </Divs>
     </>

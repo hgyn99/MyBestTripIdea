@@ -24,9 +24,10 @@ const OptionsContainer = styled.div`
 // 선택지
 const OptionLabel = styled.label`
   display: inline-block; // 블록 레벨 요소로 변경
-  margin-right: 70px; // 각 옵션 사이의 여백
-  font-family: "GmarketSansTTFMedium";
-  font-size: 20px; // 폰트 크기
+  margin-right: 30px; // 각 옵션 사이의 여백
+  font-family: "Jalnan2TTF";
+  font-size: 15px; // 폰트 크기
+  color: gray;
   cursor: pointer; // 마우스 오버 시 커서 변경
 `;
 
@@ -51,6 +52,10 @@ const StyledButton = styled.button`
   /* &:hover {
     background-color: #9dd0d8; // 호버 시 배경색 변경
   } */
+`;
+const QuestionText = styled.span`
+  background-color: #dbdbdb; // 형광펜 효과를 위한 배경색
+  padding: 3px; // 텍스트 주변에 여백을 추가
 `;
 
 interface Question {
@@ -157,7 +162,11 @@ const Survey_test: React.FC = () => {
         )
         .map((question) => (
           <QuestionTitle key={question.id}>
-            <p>{question.text}</p>
+            <p>
+              <QuestionText>
+                Q{question.id}. {question.text}
+              </QuestionText>
+            </p>
             {question.options.map((option) => (
               <OptionLabel key={option}>
                 <RadioBoxInput

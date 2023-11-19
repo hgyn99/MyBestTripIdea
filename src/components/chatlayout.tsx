@@ -37,7 +37,8 @@ const MBTIBlock = styled.div`
 `;
 
 const DayPlanContainer = styled.div`
-  margin: 20px;
+  font-family: "Jalnan2TTF";
+  //margin-left: 0px;
   color: black;
 `;
 
@@ -64,6 +65,7 @@ const Divs = styled.div`
 `;
 
 const DayPlanItem = styled.li`
+  font-family: "Jalnan2TTF";
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -102,11 +104,28 @@ const SatisfactionRadio = styled.div`
   }
 
   input[type="radio"]:checked:after {
-    background-color: #f86480;
+    background-color: #f2bdaf;
   }
   input[type="radio"]:hover {
     cursor: pointer;
   }
+`;
+
+// 제출하기 버튼
+const StyledButton = styled.button`
+  font-family: "Jalnan2TTF";
+  background-color: #f1d19d; // 배경색
+  color: black; // 텍스트 색상
+  padding: 15px 32px; // 안쪽 여백
+  border: none; // 테두리 없음
+  border-radius: 30px; // 모서리 둥글게
+  cursor: pointer; // 마우스 오버 시 커서 변경
+  font-size: 16px; // 폰트 크기
+  margin-top: 10px;
+  margin-left: 70px;
+  /* &:hover {
+    background-color: #d8c19d; // 호버 시 배경색 변경
+  } */
 `;
 
 export default function Layout() {
@@ -133,7 +152,25 @@ export default function Layout() {
 
   return (
     <>
-      <MenuContainer>
+      <Link to="/">
+        <MenuItem>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="black"
+            className="w-6 h-6"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"
+            />
+          </svg>
+        </MenuItem>
+      </Link>
+      {/* <MenuContainer>
         <Link to="/">
           <MenuItem>
             <svg
@@ -204,7 +241,7 @@ export default function Layout() {
             />
           </svg>
         </MenuItem>
-      </MenuContainer>
+      </MenuContainer> */}
 
       <Outlet />
       <MBTIBlock>
@@ -212,9 +249,11 @@ export default function Layout() {
       </MBTIBlock>
 
       <DayPlanContainer>
+        &emsp; &emsp;&nbsp;
         <DayButton onClick={handlePrevDay}>&lt;</DayButton>
         {day}일차
         <DayButton onClick={handleNextDay}>&gt;</DayButton>
+        &emsp;만족&nbsp;&nbsp;불만족
         <ul>
           {[
             "여행 추천지1",
@@ -227,7 +266,6 @@ export default function Layout() {
               {day}일차 {destination}
               <SatisfactionRadio>
                 <label>
-                  만족
                   <input
                     type="radio"
                     name={`satisfaction-${destination}`}
@@ -235,7 +273,6 @@ export default function Layout() {
                   />
                 </label>
                 <label>
-                  불만족
                   <input
                     type="radio"
                     name={`satisfaction-${destination}`}
@@ -246,6 +283,7 @@ export default function Layout() {
             </DayPlanItem>
           ))}
         </ul>
+        <StyledButton type="submit">여행지 만족도 제출</StyledButton>
       </DayPlanContainer>
     </>
   );
