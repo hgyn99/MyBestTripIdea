@@ -1,5 +1,57 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import styled from "styled-components";
+
+// 질문 제목
+const QuestionTitle = styled.h3`
+  font-family: "GmarketSansTTFBold";
+  font-size: 24px; // 폰트 크기
+  color: #333; // 폰트 색상
+  margin-left: 30px;
+  margin-bottom: 8px; // 제목 아래 여백
+`;
+
+// 선택지 컨테이너
+const OptionsContainer = styled.div`
+  display: flex; // flex 레이아웃 사용
+  flex-direction: row; // 가로 방향 배열
+  justify-content: start; // 왼쪽 정렬
+  margin-left: 50px;
+  margin-top: 2%;
+  margin-bottom: 1%; // 컨테이너 하단 여백
+`;
+
+// 선택지
+const OptionLabel = styled.label`
+  display: inline-block; // 블록 레벨 요소로 변경
+  margin-right: 70px; // 각 옵션 사이의 여백
+  font-family: "GmarketSansTTFMedium";
+  font-size: 20px; // 폰트 크기
+  cursor: pointer; // 마우스 오버 시 커서 변경
+`;
+
+// 선택지 버튼
+const RadioBoxInput = styled.input`
+  width: 15px;
+  height: 15px;
+`;
+
+// 제출하기 버튼
+const StyledButton = styled.button`
+  background-color: #b5e2e9; // 배경색
+  color: white; // 텍스트 색상
+  padding: 15px 32px; // 안쪽 여백
+  border: none; // 테두리 없음
+  border-radius: 30px; // 모서리 둥글게
+  cursor: pointer; // 마우스 오버 시 커서 변경
+  font-size: 16px; // 폰트 크기
+  margin-top: 30px;
+  margin-left: 30px;
+
+  /* &:hover {
+    background-color: #9dd0d8; // 호버 시 배경색 변경
+  } */
+`;
 
 interface Question {
   id: number;
@@ -104,11 +156,11 @@ const Survey_test: React.FC = () => {
           (currentPage + 1) * QUESTIONS_PER_PAGE
         )
         .map((question) => (
-          <div key={question.id}>
+          <QuestionTitle key={question.id}>
             <p>{question.text}</p>
             {question.options.map((option) => (
-              <label key={option}>
-                <input
+              <OptionLabel key={option}>
+                <RadioBoxInput
                   type="radio"
                   name={`question-${question.id}`}
                   value={option}
@@ -116,18 +168,20 @@ const Survey_test: React.FC = () => {
                   onChange={() => handleAnswerChange(question.id, option)}
                 />
                 {option}
-              </label>
+              </OptionLabel>
             ))}
-          </div>
+          </QuestionTitle>
         ))}
       {currentPage < TOTAL_PAGES - 1 && (
-        <button onClick={handleNextPage} disabled={!isPageComplete()}>
+        <StyledButton onClick={handleNextPage} disabled={!isPageComplete()}>
           다음
-        </button>
+        </StyledButton>
       )}
-      <button onClick={handleSubmit} disabled={!allAnswered}>
-        제출
-      </button>
+      {currentPage == 3 && (
+        <StyledButton onClick={handleSubmit} disabled={!allAnswered}>
+          제출
+        </StyledButton>
+      )}
     </div>
   );
 };
