@@ -35,84 +35,30 @@ const Wrapper = styled.div`
 `;
 
 export default function Chatroomlist() {
-  const [chatRooms, setChatRooms] = useState<ChatRoom[]>([]); // 상태 변수 이름 변경
-  //const [chatRoomId, setChatRoomId] = useState<ChatRoom[]>([]);
+  const [chatRooms, setChatRooms] = useState<ChatRoom[]>([]);
+  const { accessToken } = useContext(AccessTokenContext);
+
   useEffect(() => {
-    const { accessToken } = useContext(AccessTokenContext);
-    // 토큰이 없다면 추가 작업을 하지 않고 함수를 종료
-     if (!accessToken) {
-         console.log('No token found');
-         return;
-     }
+    if (!accessToken) {
+      console.log('No token found');
+      return;
+    }
     const config = {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
     };
-    axios
-      .get("http://44.218.133.175:3000/api/v1/chatrooms", config)
+    axios.get("http://44.218.133.175:3000/api/v1/chatrooms", config)
       .then((res) => {
-        const filteredChatRooms = res.data.filter(
-          (chatroom: ChatRoom) => chatroom.chatRoomId >= 1
-        );
-        setChatRooms(filteredChatRooms);
-        console.log(filteredChatRooms); // 서버에 있는 테스트 데이터 제외하고 필터링된 데이터 확인
+        setChatRooms(res.data); // 여기를 수정합니다. res.data는 서버 응답에 따라 다를 수 있습니다.
       })
       .catch((err) => {
         console.log(err);
       });
-  }, []);
-  // const exampleData = {
-  //   chatRoomId: 1,
-  //   userId: "user123",
-  //   title: "Chat Roomsasa Title",
-  //   status: "참여하기",
-  //   username: "exampleUser",
-  // };
-  // const exampleData2 = {
-  //   chatRoomId: 2,
-  //   userId: "user123",
-  //   title: "Chat Room Titless",
-  //   status: "참여하기",
-  //   username: "exampleUser",
-  // };
-  // const exampleData3 = {
-  //   chatRoomId: 2,
-  //   userId: "user123",
-  //   title: "Chat Room Titless",
-  //   status: "참여하기",
-  //   username: "exampleUser",
-  // };
-  // const exampleData4 = {
-  //   chatRoomId: 3,
-  //   userId: "user123",
-  //   title: "Chat Room Titless",
-  //   status: "참여하기",
-  //   username: "exampleUser",
-  // };
-  // const exampleData5 = {
-  //   chatRoomId: 4,
-  //   userId: "user123",
-  //   title: "Chat Room Titless",
-  //   status: "참여하기",
-  //   username: "exampleUser",
-  // };
-  // const exampleData6 = {
-  //   chatRoomId: 6,
-  //   userId: "user123",
-  //   title: "Chat Room Titless",
-  //   status: "대기 중",
-  //   username: "exampleUser",
-  // };
+  }, [accessToken]); // accessToken을 의존성 배열에 추가합니다.
 
   return (
     <Wrapper>
-      {/* <ChatRoom {...exampleData} />
-      <ChatRoom {...exampleData2} />
-      <ChatRoom {...exampleData3} />
-      <ChatRoom {...exampleData4} />
-      <ChatRoom {...exampleData5} />
-      <ChatRoom {...exampleData6} /> */}
       {chatRooms.map((chatroom) => (
         <ChatRoom key={chatroom.chatRoomId} {...chatroom} />
       ))}

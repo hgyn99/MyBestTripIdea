@@ -27,8 +27,10 @@ export default function CreateAccount() {
         }
     }
 
+    const { setAccessToken } = useContext(AccessTokenContext);
     const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        
         setError("");
         if (isLoading || name === "" || email === "" || password === "") return;
         try {
@@ -48,7 +50,9 @@ export default function CreateAccount() {
             email: email,
             password: password,
           });
-          const { setAccessToken } = useContext(AccessTokenContext);
+          console.log("asd");
+          
+          console.log("asdss");
           console.log(response);
           console.log(response.data.data.token.accessToken);
           setAccessToken(response.data.data.token.accessToken);

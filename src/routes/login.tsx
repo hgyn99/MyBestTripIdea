@@ -90,6 +90,8 @@ export default function CreateAccount() {
       setPassword(value);
     }
   };
+
+  const { setAccessToken } = useContext(AccessTokenContext);
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
@@ -99,14 +101,16 @@ export default function CreateAccount() {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       
       const response = await axios.post(
-        "http://44.218.133.175:8080/api/v1/chatrooms",
+        "http://44.218.133.175:8080/api/v1/members/login",
         {
+          name,
           email,
           password,
         },
       );
-      const { setAccessToken } = useContext(AccessTokenContext);
+      
       setAccessToken(response.data.data.token.accessToken);
+      console.log(response.data.data.token.accessToken);
       navigate("/survey");
     } catch (e) {
       if (e instanceof FirebaseError) {
