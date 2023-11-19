@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 import axios from "axios";
 
 import HistoryID from "./history";
-
+import { AccessTokenContext } from "./TokenContext";
 export interface HistoryID {
   id: string;
   userId: string;
@@ -37,16 +37,20 @@ const Wrapper = styled.div`
 export default function Chatroomlist() {
   const [historyID, setHistoryID] = useState<HistoryID[]>([]);
   useEffect(() => {
-    const token = localStorage.getItem("userToken"); // 예시: 로컬 스토리지에서 토큰 가져오기
-
+    const { accessToken } = useContext(AccessTokenContext);
     // 토큰이 없다면 추가 작업을 하지 않고 함수를 종료
-    if (!token) {
-      console.log("No token found");
-      return;
-    }
+     if (!accessToken) {
+         console.log('No token found');
+         return;
+     }
+    const config = {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    };
 
     axios
-      .get("")
+      .get("44.218.133.175:8080/api/v1/history")
       .then((res) => {
         setHistoryID(res.data);
       })

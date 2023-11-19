@@ -24,6 +24,7 @@ import GmarketSansTTFLight from "./fonts/GmarketSansTTFLight.ttf";
 import Jalnan2TTF from "./fonts/Jalnan2TTF.ttf";
 import React from 'react';
 import { ChatRoomProvider } from './components/ChatRoomContext';
+import { AccessTokenProvider } from "./components/TokenContext";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -150,12 +151,14 @@ function App() {
     init();
   }, []);
   return (
+    <AccessTokenProvider>
     <ChatRoomProvider> {/* ChatRoomProvider 추가 */}
       <Wrapper>
         <GlobalStyles />
         {isLoading ? <LoadingScreen /> : <RouterProvider router={router} />}
       </Wrapper>
     </ChatRoomProvider>
+    </AccessTokenProvider>
   );
 }
 
