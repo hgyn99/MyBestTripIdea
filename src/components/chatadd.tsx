@@ -1,7 +1,7 @@
 import { styled } from "styled-components";
 import React, { useState } from "react";
 import axios from "axios";
-
+//초대 /갱신동의 거부 / 타이틀/ 여행일정 / 
 const Form = styled.form`
   display: flex;
   gap: 10px;

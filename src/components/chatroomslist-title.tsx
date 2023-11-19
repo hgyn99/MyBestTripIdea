@@ -1,6 +1,6 @@
 import { ChatRoom } from "./chatroomslist-timeline";
 import styled from "styled-components";
-import React, { createContext, useContext, useState } from "react";
+import {useContext} from "react";
 import { useNavigate } from "react-router-dom";
 import { ChatRoomContext } from "./ChatRoomContext";
 const Wrapper = styled.div`
@@ -68,10 +68,8 @@ const ParticipateButton = styled.button<StatusProps>`
 
 export default function ChatRoom({
   chatRoomId,
-  userId,
   title,
   current_status,
-  username,
 }: ChatRoom) {
   const { setChatroomId } = useContext(ChatRoomContext);
   const navigate = useNavigate();
