@@ -59,58 +59,10 @@ export default function Chatroomlist() {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
-  // const exampleData = {
-  //   chatRoomId: 1,
-  //   userId: "user123",
-  //   title: "Chat Roomsasa Title",
-  //   status: "참여하기",
-  //   username: "exampleUser",
-  // };
-  // const exampleData2 = {
-  //   chatRoomId: 2,
-  //   userId: "user123",
-  //   title: "Chat Room Titless",
-  //   status: "참여하기",
-  //   username: "exampleUser",
-  // };
-  // const exampleData3 = {
-  //   chatRoomId: 2,
-  //   userId: "user123",
-  //   title: "Chat Room Titless",
-  //   status: "참여하기",
-  //   username: "exampleUser",
-  // };
-  // const exampleData4 = {
-  //   chatRoomId: 3,
-  //   userId: "user123",
-  //   title: "Chat Room Titless",
-  //   status: "참여하기",
-  //   username: "exampleUser",
-  // };
-  // const exampleData5 = {
-  //   chatRoomId: 4,
-  //   userId: "user123",
-  //   title: "Chat Room Titless",
-  //   status: "참여하기",
-  //   username: "exampleUser",
-  // };
-  // const exampleData6 = {
-  //   chatRoomId: 6,
-  //   userId: "user123",
-  //   title: "Chat Room Titless",
-  //   status: "대기 중",
-  //   username: "exampleUser",
-  // };
+  }, [accessToken]);
 
   return (
     <Wrapper>
-      {/* <ChatRoom {...exampleData} />
-      <ChatRoom {...exampleData2} />
-      <ChatRoom {...exampleData3} />
-      <ChatRoom {...exampleData4} />
-      <ChatRoom {...exampleData5} />
-      <ChatRoom {...exampleData6} /> */}
       {chatRooms.map((chatroom) => (
         <ChatRoom key={chatroom.chatRoomId} {...chatroom} />
       ))}
