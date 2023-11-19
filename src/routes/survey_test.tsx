@@ -73,7 +73,7 @@ const Survey_test: React.FC = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/api/v1/members/survey/1")
+      .get("http://localhost:4000/api/v1/members/survey/1")
       .then((response) => {
         const loadedQuestions = response.data.map(
           (item: any, index: number) => ({
@@ -132,7 +132,7 @@ const Survey_test: React.FC = () => {
     // 데이터를 서버에 POST
     axios
       .post(
-        "http://localhost:3000/api/v1/members/survey/1",
+        "http://localhost:4000/api/v1/members/survey/1",
         JSON.stringify({ surveyResult }), // 데이터를 JSON 문자열로 변환
         {
           headers: {

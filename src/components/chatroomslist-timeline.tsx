@@ -50,7 +50,7 @@ export default function Chatroomlist() {
       },
     };
     axios
-      .get("http://localhost:3000/api/v1/chatrooms", config)
+      .get("http://localhost:4000/api/v1/chatrooms", config)
       .then((res) => {
         const filteredChatRooms = res.data.filter(
           (chatroom: ChatRoom) => chatroom.chatRoomId >= 1

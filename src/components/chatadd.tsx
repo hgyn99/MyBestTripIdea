@@ -74,7 +74,7 @@ export default function ChatAddForm() {
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const token = localStorage.getItem("userToken"); // 예시: 로컬 스토리지에서 토큰 가져오기
-
+    console.log(token);
     // 토큰이 없다면 추가 작업을 하지 않고 함수를 종료
     // if (!token) {
     //     console.log('No token found');
@@ -82,7 +82,7 @@ export default function ChatAddForm() {
     // }
     const config = {
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6MSwibWVtYmVyUm9sZSI6IltST0xFX1VTRVJdIiwiaWF0IjoxNzAwMzkxMTA4LCJleHAiOjE3MzE5NDg3MDh9.6fpj2GP-x0m_DZ1mT6wCyhoOtCuVFdkB539B-Pyt07M`,
       },
     };
 
@@ -108,7 +108,8 @@ export default function ChatAddForm() {
     //   });
 
     const response = await axios.post(
-      "http://localhost:3000/api/v1/chatrooms",
+      "http://44.218.133.175:8080/api/v1/chatrooms",
+      //"http://localhost:3000/api/v1/chatrooms",
       {
         title: title,
         spot: spot,
