@@ -87,28 +87,27 @@ export default function ChatAddForm() {
       },
     };
 
-    // axios
-    //   .post(
-    //     //"http://localhost:8080/api/v1/chatrooms",
-    //     "http://localhost:3000/api/v1/chatrooms",
-    //     {
-    //       title: title,
-    //       spot: spot,
-    //       headcount: headcount,
-    //       start: start,
-    //       end: end,
-    //       password: password,
-    //     },
-    //     config
-    //   )
-    //   .then((res) => {
-    //     console.log(res.data);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+     axios
+       .post(
+         "http://44.218.133.175:8080/api/v1/chatrooms",
+         {
+           title: title,
+           spot: spot,
+           headcount: headcount,
+           start: start,
+           end: end,
+           password: password,
+         },
+         config
+       )
+       .then((res) => {
+         console.log(res);
+       })
+       .catch((err) => {
+         console.log(err);
+       });
 
-    const response = await axios.post(
+    /*const response = await axios.post(
       "http://44.218.133.175:8080/api/v1/chatrooms",
       {
         title: title,
@@ -119,20 +118,7 @@ export default function ChatAddForm() {
         password: password,
       },
       config
-    );
-    // setTitle(response.data);
-    // setSpot(response.data);
-    // setHeadcount(response.data);
-    // setStart(response.data);
-    // setEnd(response.data);
-    // setPassword(response.data);
-
-    // setTitle("");
-    // setSpot("");
-    // setHeadcount("");
-    // setStart("");
-    // setEnd("");
-    // setPassword("");
+    );*/
   };
   return (
     <>

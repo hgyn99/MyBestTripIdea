@@ -37,6 +37,7 @@ const Wrapper = styled.div`
 export default function Chatroomlist() {
   const [historyID, setHistoryID] = useState<HistoryID[]>([]);
   const { accessToken } = useContext(AccessTokenContext);
+
   useEffect(() => {
     
     // 토큰이 없다면 추가 작업을 하지 않고 함수를 종료
@@ -51,7 +52,7 @@ export default function Chatroomlist() {
     };
 
     axios
-      .get("44.218.133.175:8080/api/v1/history")
+      .get("44.218.133.175:8080/api/v1/history", config)
       .then((res) => {
         setHistoryID(res.data);
       })
@@ -59,79 +60,10 @@ export default function Chatroomlist() {
         console.log(err);
       });
   }, []);
-  const exampleData = {
-    id: "1",
-    userId: "user123",
-    title: "Chat Roomsasa Title",
-    status: "성향 조사",
-    username: "exampleUser",
-  };
-  const exampleData2 = {
-    id: "2",
-    userId: "user123",
-    title: "Chat Room Titless",
-    status: "대기 중",
-    username: "exampleUser",
-  };
-  const exampleData3 = {
-    id: "2",
-    userId: "user123",
-    title: "Chat Room Titless",
-    status: "참여하기",
-    username: "exampleUser",
-  };
-  const exampleData4 = {
-    id: "2",
-    userId: "user123",
-    title: "Chat Room Titless",
-    status: "참여하기",
-    username: "exampleUser",
-  };
-  const exampleData5 = {
-    id: "2",
-    userId: "user123",
-    title: "Chat Room Titless",
-    status: "성향 조사",
-    username: "exampleUser",
-  };
-  const exampleData6 = {
-    id: "2",
-    userId: "user123",
-    title: "Chat Room Titless",
-    status: "대기 중",
-    username: "exampleUser",
-  };
-  const exampleData7 = {
-    id: "2",
-    userId: "user123",
-    title: "Chat Room Titless",
-    status: "대기 중",
-    username: "exampleUser",
-  };
+ 
 
   return (
     <Wrapper>
-      <div>
-      <HistoryID {...exampleData} />
-        </div>
-        <div>
-      <HistoryID {...exampleData2} />
-        </div>
-        <div>
-      <HistoryID {...exampleData3} />
-        </div>
-        <div>
-      <HistoryID {...exampleData4} />
-        </div>
-        <div>
-      <HistoryID {...exampleData5} />
-        </div>
-        <div>
-      <HistoryID {...exampleData6} />
-        </div>
-        <div>
-      <HistoryID {...exampleData7} />
-        </div>
       {historyID.map((history) => (
         <HistoryID key={history.id} {...history} />
       ))}

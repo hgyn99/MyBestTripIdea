@@ -67,29 +67,29 @@ const ParticipateButton = styled.button<StatusProps>`
 `;
 
 export default function ChatRoom({
-  chatRoomId,
+  chatroomId,
   title,
-  current_status,
+  chatroomStatus,
 }: ChatRoom) {
   const { setChatroomId } = useContext(ChatRoomContext);
   const navigate = useNavigate();
 
   const handleJoinChat = () => {
-    setChatroomId(chatRoomId);
+    setChatroomId(chatroomId);
     console.log("채팅방에 참여합니다!");
-    console.log(chatRoomId);
+    console.log(chatroomId);
     navigate(`/chat`);
   };
 
   return (
     <Wrapper>
       <Title>{title}</Title>
-      {current_status === "참여하기" ? (
-        <ParticipateButton status={current_status} onClick={handleJoinChat}>
-          {current_status}
+      {chatroomStatus === "참여하기" ? (
+        <ParticipateButton status={chatroomStatus} onClick={handleJoinChat}>
+          {chatroomStatus}
         </ParticipateButton>
       ) : (
-        <Status status={current_status}>{current_status}</Status>
+        <Status status={chatroomStatus}>{chatroomStatus}</Status>
       )}
     </Wrapper>
   );
