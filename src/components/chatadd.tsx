@@ -2,7 +2,7 @@ import { styled } from "styled-components";
 import React, { useState, useContext } from "react";
 import axios from "axios";
 import { AccessTokenContext } from "./TokenContext";
-//초대 /갱신동의 거부 / 타이틀/ 여행일정 / 
+//초대 /갱신동의 거부 / 타이틀/ 여행일정 /
 const Form = styled.form`
   display: flex;
   gap: 10px;
@@ -71,16 +71,16 @@ export default function ChatAddForm() {
   const onChange_password = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   };
-
   const { accessToken } = useContext(AccessTokenContext);
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
+
+    //console.log(accessToken);
     // 토큰이 없다면 추가 작업을 하지 않고 함수를 종료
-     if (!accessToken) {
-         console.log('No token found');
-         return;
-     }
+    if (!accessToken) {
+      console.log("No token found");
+      return;
+    }
     const config = {
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -109,6 +109,7 @@ export default function ChatAddForm() {
 
     /*const response = await axios.post(
       "http://44.218.133.175:8080/api/v1/chatrooms",
+      //"http://localhost:3000/api/v1/chatrooms",
       {
         title: title,
         spot: spot,

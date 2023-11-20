@@ -37,7 +37,8 @@ const MBTIBlock = styled.div`
 `;
 
 const DayPlanContainer = styled.div`
-  margin: 20px;
+  font-family: "Jalnan2TTF";
+  //margin-left: 0px;
   color: black;
 `;
 
@@ -49,9 +50,89 @@ const DayButton = styled.button`
   cursor: pointer;
 `;
 
+const Divs = styled.div`
+  //position: fixed;
+  top: 0;
+  right: 0;
+  height: 100%;
+  color: black;
+  font-size: 20px;
+  // 가운데 정렬
+  display: flex;
+  flex-direction: row;
+  //justify-content: center; // 수직 가운데 정렬
+  //align-items: center; // 수평 가운데 정렬
+`;
+
+const DayPlanItem = styled.li`
+  font-family: "Jalnan2TTF";
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+`;
+
+const SatisfactionRadio = styled.div`
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
+
+  label {
+    margin: 0 10px;
+    font-size: 1em;
+    color: #333;
+    display: flex;
+    align-items: center;
+  }
+
+  input[type="radio"] {
+    vertical-align: middle;
+    appearance: none;
+  }
+
+  // 커스텀 라디오 버튼 디자인
+  input[type="radio"]:after {
+    width: 15px;
+    height: 15px;
+    transition: border 0.5s ease-in-out;
+    border-radius: 15px;
+    position: relative;
+    background-color: white;
+    content: "";
+    display: inline-block;
+    visibility: visible;
+    border: max(2px, 0.1em) solid gray;
+  }
+
+  input[type="radio"]:checked:after {
+    background-color: #f2bdaf;
+  }
+  input[type="radio"]:hover {
+    cursor: pointer;
+  }
+`;
+
+// 제출하기 버튼
+const StyledButton = styled.button`
+  font-family: "Jalnan2TTF";
+  background-color: #f1d19d; // 배경색
+  color: black; // 텍스트 색상
+  padding: 15px 32px; // 안쪽 여백
+  border: none; // 테두리 없음
+  border-radius: 30px; // 모서리 둥글게
+  cursor: pointer; // 마우스 오버 시 커서 변경
+  font-size: 16px; // 폰트 크기
+  margin-top: 10px;
+  margin-left: 70px;
+  /* &:hover {
+    background-color: #d8c19d; // 호버 시 배경색 변경
+  } */
+`;
+
 export default function Layout() {
   const navigate = useNavigate();
   const [day, setDay] = useState(1);
+  const [satisfaction, setSatisfaction] = useState({});
+
   const onLogOut = async () => {
     const ok = confirm("Are you sure you want to log out?");
     if (ok) {
@@ -71,7 +152,25 @@ export default function Layout() {
 
   return (
     <>
-      <MenuContainer>
+      <Link to="/">
+        <MenuItem>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="black"
+            className="w-6 h-6"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"
+            />
+          </svg>
+        </MenuItem>
+      </Link>
+      {/* <MenuContainer>
         <Link to="/">
           <MenuItem>
             <svg
@@ -142,23 +241,49 @@ export default function Layout() {
             />
           </svg>
         </MenuItem>
-      </MenuContainer>
+      </MenuContainer> */}
 
       <Outlet />
       <MBTIBlock>
         <MBTIBlock>MBTI</MBTIBlock>
       </MBTIBlock>
+
       <DayPlanContainer>
+        &emsp; &emsp;&nbsp;
         <DayButton onClick={handlePrevDay}>&lt;</DayButton>
         {day}일차
         <DayButton onClick={handleNextDay}>&gt;</DayButton>
+        &emsp;만족&nbsp;&nbsp;불만족
         <ul>
-          <li>1일차 여행 추천지1</li>
-          <li>1일차 여행 추천지2</li>
-          <li>1일차 여행 추천지3</li>
-          <li>1일차 여행 추천지4</li>
-          <li>1일차 여행 추천지5</li>
+          {[
+            "여행 추천지1",
+            "여행 추천지2",
+            "여행 추천지3",
+            "여행 추천지4",
+            "여행 추천지5",
+          ].map((destination, index) => (
+            <DayPlanItem key={index}>
+              {day}일차 {destination}
+              <SatisfactionRadio>
+                <label>
+                  <input
+                    type="radio"
+                    name={`satisfaction-${destination}`}
+                    value="satisfied"
+                  />
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    name={`satisfaction-${destination}`}
+                    value="unsatisfied"
+                  />
+                </label>
+              </SatisfactionRadio>
+            </DayPlanItem>
+          ))}
         </ul>
+        <StyledButton type="submit">여행지 만족도 제출</StyledButton>
       </DayPlanContainer>
     </>
   );

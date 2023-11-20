@@ -54,7 +54,6 @@ export default function Timeline() {
 
       console.log("챗룸아이디 입력됨");
       console.log(chatRoomId);
-      //여기 부분 쿼리 두개가 안먹음. orderby를 빼면 챗룸아이디 별로 채팅이 나오는데, 시간 순서가 안맞음
       const messagesQuery = query(
         q,
         where("chatRoomId", "==", chatRoomId),

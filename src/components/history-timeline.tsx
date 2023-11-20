@@ -22,10 +22,10 @@ const Wrapper = styled.div`
     padding: 10px;
     border: 3px solid black;
     margin: 10px; // 마진 추가
-    height:50%;
-    width:100%;
-    border-radius:10px;
-    position:relative
+    height: 50%;
+    width: 100%;
+    border-radius: 10px;
+    position: relative;
   }
 
   &::-webkit-scrollbar {
@@ -41,10 +41,10 @@ export default function Chatroomlist() {
   useEffect(() => {
     
     // 토큰이 없다면 추가 작업을 하지 않고 함수를 종료
-     if (!accessToken) {
-         console.log('No token found');
-         return;
-     }
+    if (!accessToken) {
+      console.log("No token found");
+      return;
+    }
     const config = {
       headers: {
         Authorization: `Bearer ${accessToken}`,

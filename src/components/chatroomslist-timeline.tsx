@@ -34,7 +34,7 @@ export default function Chatroomlist() {
 
   useEffect(() => {
     if (!accessToken) {
-      console.log('No token found');
+      console.log("No token found");
       return;
     }
     const config = {
@@ -43,6 +43,7 @@ export default function Chatroomlist() {
       },
     };
     console.log(accessToken);
+
     axios.get("http://44.218.133.175:8080/api/v1/chatrooms", config)
       .then((res) => {
         if (Array.isArray(res.data.data.chatRoomInfos)) {

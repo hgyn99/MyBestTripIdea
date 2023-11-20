@@ -98,15 +98,19 @@ export default function CreateAccount() {
     if (isLoading || email === "" || password === "") return;
     try {
       setLoading(true);
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
       const response = await axios.post(
         "http://44.218.133.175:8080/api/v1/members/login",
         {
           name,
           email,
           password,
-        },
+        } 
       );
       
       setAccessToken(response.data.data.token.accessToken);

@@ -1,4 +1,62 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import styled from "styled-components";
+
+// 질문 제목
+const QuestionTitle = styled.h3`
+  font-family: "GmarketSansTTFBold";
+  font-size: 24px; // 폰트 크기
+  color: #333; // 폰트 색상
+  margin-left: 30px;
+  margin-bottom: 8px; // 제목 아래 여백
+`;
+
+// 선택지 컨테이너
+const OptionsContainer = styled.div`
+  display: flex; // flex 레이아웃 사용
+  flex-direction: row; // 가로 방향 배열
+  justify-content: start; // 왼쪽 정렬
+  margin-left: 50px;
+  margin-top: 2%;
+  margin-bottom: 1%; // 컨테이너 하단 여백
+`;
+
+// 선택지
+const OptionLabel = styled.label`
+  display: inline-block; // 블록 레벨 요소로 변경
+  margin-right: 30px; // 각 옵션 사이의 여백
+  font-family: "Jalnan2TTF";
+  font-size: 15px; // 폰트 크기
+  color: gray;
+  cursor: pointer; // 마우스 오버 시 커서 변경
+`;
+
+// 선택지 버튼
+const RadioBoxInput = styled.input`
+  width: 15px;
+  height: 15px;
+`;
+
+// 제출하기 버튼
+const StyledButton = styled.button`
+  background-color: #b5e2e9; // 배경색
+  color: white; // 텍스트 색상
+  padding: 15px 32px; // 안쪽 여백
+  border: none; // 테두리 없음
+  border-radius: 30px; // 모서리 둥글게
+  cursor: pointer; // 마우스 오버 시 커서 변경
+  font-size: 16px; // 폰트 크기
+  margin-top: 30px;
+  margin-left: 30px;
+
+  /* &:hover {
+    background-color: #9dd0d8; // 호버 시 배경색 변경
+  } */
+`;
+const QuestionText = styled.span`
+  background-color: #dbdbdb; // 형광펜 효과를 위한 배경색
+  padding: 3px; // 텍스트 주변에 여백을 추가
+`;
 
 interface Question {
   id: number;
@@ -7,48 +65,30 @@ interface Question {
   selectedOption: string;
 }
 
-const questionTexts = [
-  "나는 여행지에서 문화와 역사적인 장소를 방문하는 것을 좋아한다.",
-  "나는 여행 중에 스포츠나 레저 활동을 즐기는 것을 선호한다.",
-  "나는 여행지에서 휴식과 힐링을 중요하게 생각한다.",
-  "나는 여행 중에 쇼핑을 즐기는 편이다.",
-  "나는 여행지에서 자연과 경치를 감상하는 것을 좋아한다.",
-  "나는 여행 중에 현지인과의 교류를 중요하게 생각한다.",
-  "나는 여행지에서 야간 활동과 야경을 즐기는 편이다.",
-  "나는 여행 중에 예술과 공연을 감상하는 것을 선호한다.",
-  "나는 여행지에서 도전적인 활동을 시도하는 것을 좋아한다.",
-  "나는 여행 중에 현지 전통과 문화를 체험하는 것을 선호한다.",
-  "나는 여행지에서 도시보다 시골을 더 선호한다.",
-  "나는 여행 중에 혼자 시간을 보내는 것을 선호한다.",
-  "나는 여행지에서 모험과 탐험을 중요하게 생각한다.",
-  "나는 여행지에서 현지인의 일상생활을 체험하는 것을 좋아한다.",
-  "나는 여행 중에 음악과 춤을 즐기는 것을 선호한다.",
-  "나는 여행지에서 역사적인 장소보다 현대적인 장소를 더 선호한다.",
-  "나는 여행 중에 스파나 마사지를 받는 것을 선호한다.",
-  "나는 여행지에서 미술관이나 박물관을 방문하는 것을 좋아한다.",
-  "나는 여행 중에 지역 페스티벌이나 이벤트에 참여하는 것을 선호한다.",
-  "나는 여행지에서 해변이나 바다 활동을 즐기는 것을 좋아한다.",
-];
-
-const questionsData: Question[] = questionTexts.map((text, index) => ({
-  id: index + 1,
-  text: text,
-  options: [
-    "STRONGLY AGREE",
-    "AGREE",
-    "NEUTRAL",
-    "DISAGREE",
-    "STRONGLY DISAGREE",
-  ],
-  selectedOption: "",
-}));
-
 const QUESTIONS_PER_PAGE = 5;
-const TOTAL_PAGES = questionsData.length / QUESTIONS_PER_PAGE;
 
 const Survey_test: React.FC = () => {
-  const [questions, setQuestions] = useState(questionsData);
+  const [questions, setQuestions] = useState<Question[]>([]);
   const [currentPage, setCurrentPage] = useState(0);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:4000/api/v1/members/survey/1")
+      .then((response) => {
+        const loadedQuestions = response.data.map(
+          (item: any, index: number) => ({
+            id: index + 1,
+            text: item.questions,
+            options: item.answers,
+            selectedOption: item.selectedAnswer,
+          })
+        );
+        setQuestions(loadedQuestions);
+      })
+      .catch((error) => {
+        console.error("Error fetching data: ", error);
+      });
+  }, []);
 
   const handleAnswerChange = (questionId: number, selectedOption: string) => {
     const updatedQuestions = questions.map((question) =>
@@ -56,6 +96,11 @@ const Survey_test: React.FC = () => {
     );
     setQuestions(updatedQuestions);
   };
+
+  const TOTAL_PAGES = 4;
+  //const TOTAL_PAGES = Math.ceil(questions.length / QUESTIONS_PER_PAGE);
+  //console.log("questions.length: " + questions.length);
+  //console.log("QUESTIONS_PER_PAGE: " + QUESTIONS_PER_PAGE);
 
   const isPageComplete = () => {
     const startIndex = currentPage * QUESTIONS_PER_PAGE;
@@ -70,13 +115,38 @@ const Survey_test: React.FC = () => {
   );
 
   const handleSubmit = () => {
-    // 모든 답변이 완료되었을 때 수행할 동작
-    const submittedAnswers = questions.map(({ id, selectedOption }) => ({
-      id,
-      selectedOption,
-    }));
-    console.log("제출된 답변:", submittedAnswers); // 모든 항목을 전송하려면 questions, 특정 항목만 전송하려면 submittedAnswers
+    // const submittedAnswers = questions.map(({ id, selectedOption }) => ({
+    //   id,
+    //   selectedOption,
+    // }));
+
+    // console.log("제출된 답변:", submittedAnswers);
     // 여기에 서버로 데이터 전송하는 로직을 추가할 수 있습니다.
+
+    // 모든 선택된 옵션을 하나의 문자열로 결합
+    const surveyResult = questions
+      .map((question) => question.selectedOption)
+      .join(",");
+    console.log("surveyResult: ", surveyResult); // 이 로그를 통해 surveyResult의 내용을 확인
+
+    // 데이터를 서버에 POST
+    axios
+      .post(
+        "http://localhost:4000/api/v1/members/survey/1",
+        JSON.stringify({ surveyResult }), // 데이터를 JSON 문자열로 변환
+        {
+          headers: {
+            "Content-Type": "application/json", // 헤더에 Content-Type 설정
+          },
+        }
+      )
+      .then((response) => {
+        console.log("서버 응답:", response);
+        // 성공적으로 제출되었을 때의 추가 동작(옵션)
+      })
+      .catch((error) => {
+        console.error("Error posting data: ", error);
+      });
   };
 
   const handleNextPage = () => {
@@ -91,11 +161,15 @@ const Survey_test: React.FC = () => {
           (currentPage + 1) * QUESTIONS_PER_PAGE
         )
         .map((question) => (
-          <div key={question.id}>
-            <p>{question.text}</p>
+          <QuestionTitle key={question.id}>
+            <p>
+              <QuestionText>
+                Q{question.id}. {question.text}
+              </QuestionText>
+            </p>
             {question.options.map((option) => (
-              <label key={option}>
-                <input
+              <OptionLabel key={option}>
+                <RadioBoxInput
                   type="radio"
                   name={`question-${question.id}`}
                   value={option}
@@ -103,18 +177,20 @@ const Survey_test: React.FC = () => {
                   onChange={() => handleAnswerChange(question.id, option)}
                 />
                 {option}
-              </label>
+              </OptionLabel>
             ))}
-          </div>
+          </QuestionTitle>
         ))}
       {currentPage < TOTAL_PAGES - 1 && (
-        <button onClick={handleNextPage} disabled={!isPageComplete()}>
+        <StyledButton onClick={handleNextPage} disabled={!isPageComplete()}>
           다음
-        </button>
+        </StyledButton>
       )}
-      <button onClick={handleSubmit} disabled={!allAnswered}>
-        제출
-      </button>
+      {currentPage == 3 && (
+        <StyledButton onClick={handleSubmit} disabled={!allAnswered}>
+          제출
+        </StyledButton>
+      )}
     </div>
   );
 };
