@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import styled from "styled-components";
+import { AccessTokenContext } from "../components/TokenContext";
 
 // 질문 제목
 const QuestionTitle = styled.h3`
@@ -40,11 +41,12 @@ const RadioBoxInput = styled.input`
 // 제출하기 버튼
 const StyledButton = styled.button`
   background-color: #b5e2e9; // 배경색
-  color: white; // 텍스트 색상
+  color: black; // 텍스트 색상
   padding: 15px 32px; // 안쪽 여백
   border: none; // 테두리 없음
   border-radius: 30px; // 모서리 둥글게
   cursor: pointer; // 마우스 오버 시 커서 변경
+  font-family: "Jalnan2TTF";
   font-size: 16px; // 폰트 크기
   margin-top: 30px;
   margin-left: 30px;
@@ -54,7 +56,8 @@ const StyledButton = styled.button`
   } */
 `;
 const QuestionText = styled.span`
-  background-color: #dbdbdb; // 형광펜 효과를 위한 배경색
+  // background-color: #cdecf0; // 형광펜 효과를 위한 배경색
+  color: black;
   padding: 3px; // 텍스트 주변에 여백을 추가
 `;
 
@@ -66,15 +69,51 @@ interface Question {
 }
 
 const QUESTIONS_PER_PAGE = 5;
+const TOTAL_PAGES = 4;
+// Progress Bar 스타일 컴포넌트
+interface ProgressBarProps {
+  width: number;
+}
+
+const ProgressBarContainer = styled.div`
+  width: 80%;
+  background-color: #e0e0e0;
+  border-radius: 20px;
+  margin: 30px;
+`;
+
+const ProgressBar = styled.div<ProgressBarProps>`
+  height: 20px;
+  background-color: #4ca34d;
+  border-radius: 20px;
+  width: ${(props) => props.width}%;
+  transition: width 0.3s ease-in-out;
+`;
 
 const Survey_test: React.FC = () => {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentPage, setCurrentPage] = useState(0);
+  const progressBarWidth = ((currentPage + 1) / TOTAL_PAGES) * 100;
+  const { accessToken } = useContext(AccessTokenContext);
 
   useEffect(() => {
+    const accessToken = localStorage.getItem("accessToken"); // 로컬 스토리지에서 액세스토큰 불러오기
+    //console.log(accessToken);
+    // 토큰이 없다면 추가 작업을 하지 않고 함수를 종료
+    if (!accessToken) {
+      console.log("No token found");
+      return;
+    }
+    const config = {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    };
     axios
-      .get("http://localhost:4000/api/v1/members/survey/1")
+      .get("http:44.218.133.175:8080/api/v1/members/survey/1", config)
+      //.get("http://localhost:4000/api/v1/members/survey/1")
       .then((response) => {
+        console.log(response.data);
         const loadedQuestions = response.data.map(
           (item: any, index: number) => ({
             id: index + 1,
@@ -97,7 +136,6 @@ const Survey_test: React.FC = () => {
     setQuestions(updatedQuestions);
   };
 
-  const TOTAL_PAGES = 4;
   //const TOTAL_PAGES = Math.ceil(questions.length / QUESTIONS_PER_PAGE);
   //console.log("questions.length: " + questions.length);
   //console.log("QUESTIONS_PER_PAGE: " + QUESTIONS_PER_PAGE);
@@ -132,7 +170,8 @@ const Survey_test: React.FC = () => {
     // 데이터를 서버에 POST
     axios
       .post(
-        "http://localhost:4000/api/v1/members/survey/1",
+        "http:44.218.133.175:8080/api/v1/members/survey/1",
+        //"http://localhost:4000/api/v1/members/survey/1",
         JSON.stringify({ surveyResult }), // 데이터를 JSON 문자열로 변환
         {
           headers: {
@@ -155,6 +194,9 @@ const Survey_test: React.FC = () => {
 
   return (
     <div>
+      <ProgressBarContainer>
+        <ProgressBar width={progressBarWidth} />
+      </ProgressBarContainer>
       {questions
         .slice(
           currentPage * QUESTIONS_PER_PAGE,

@@ -24,7 +24,6 @@ export default function SendMessageForm() {
   const [title, setTitle] = useState("");
   const { accessToken } = useContext(AccessTokenContext);
   useEffect(() => {
-    
     // 토큰이 없다면 추가 작업을 하지 않고 함수를 종료
     if (!accessToken) {
       console.log("No token found");

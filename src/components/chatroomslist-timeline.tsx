@@ -1,22 +1,12 @@
-import {
-  useState,
-  useEffect,
-  createContext,
-  useMemo,
-  Dispatch,
-  SetStateAction,
-  useContext,
-} from "react";
+import { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import ChatRoom from "./chatroomslist-title";
 import { AccessTokenContext } from "./TokenContext";
 export interface ChatRoom {
-  chatRoomId: number;
-  userId: string;
+  chatroomId: number;
   title: string;
-  current_status: string;
-  username: string;
+  chatroomStatus: string;
 }
 
 const Wrapper = styled.div`
@@ -36,8 +26,9 @@ const Wrapper = styled.div`
 
 export default function Chatroomlist() {
   const [chatRooms, setChatRooms] = useState<ChatRoom[]>([]);
-  const { accessToken } = useContext(AccessTokenContext);
-
+  //const { accessToken } = useContext(AccessTokenContext);
+  const accessToken = localStorage.getItem("accessToken"); // 로컬 스토리지에서 액세스토큰 불러오기
+  console.log("현재 토큰(챗룸타임라인): " + accessToken);
   useEffect(() => {
     if (!accessToken) {
       console.log("No token found");
@@ -52,17 +43,23 @@ export default function Chatroomlist() {
     axios
       .get("http://44.218.133.175:8080/api/v1/chatrooms", config)
       .then((res) => {
-        setChatRooms(res.data); // 여기를 수정합니다. res.data는 서버 응답에 따라 다를 수 있습니다.
+        // setChatRooms(res.data); // 여기를 수정합니다. res.data는 서버 응답에 따라 다를 수 있습니다.
+        if (Array.isArray(res.data.data.chatRoomInfos)) {
+          setChatRooms(res.data.data.chatRoomInfos);
+        } else {
+          console.log("Data is not an array:", res.data.data.chatRoomInfos);
+          // 적절한 오류 처리 로직을 추가하세요.
+        }
       })
       .catch((err) => {
-        console.log(err);
+        console.log("에러" + err);
       });
   }, [accessToken]); // accessToken을 의존성 배열에 추가합니다.
 
   return (
     <Wrapper>
       {chatRooms.map((chatroom) => (
-        <ChatRoom key={chatroom.chatRoomId} {...chatroom} />
+        <ChatRoom key={chatroom.chatroomId} {...chatroom} />
       ))}
     </Wrapper>
   );

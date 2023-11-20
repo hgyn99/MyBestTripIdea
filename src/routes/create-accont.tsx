@@ -3,6 +3,7 @@ import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "../firebase";
 import { Link, useNavigate } from "react-router-dom";
 import { FirebaseError } from "firebase/app";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import {
   Form,
   Input,
@@ -49,7 +50,9 @@ export default function CreateAccount() {
       await updateProfile(credentials.user, {
         displayName: name,
       });
-
+      const user = auth.currentUser;
+      console.log(user);
+      //console.log(auth);
       console.log(name);
       console.log(email);
       console.log(password);
@@ -64,9 +67,12 @@ export default function CreateAccount() {
       );
 
       console.log(response);
-      console.log(response.data.data.token.accessToken);
+      console.log(
+        email + "의 토큰(회원가입): " + response.data.data.token.accessToken
+      );
       setAccessToken(response.data.data.token.accessToken);
-      navigate("/");
+      localStorage.setItem("accessToken", response.data.data.token.accessToken); // 새로고침해도 토큰 저장
+      navigate("/survey");
     } catch (e) {
       if (e instanceof FirebaseError) {
         setError(e.message);

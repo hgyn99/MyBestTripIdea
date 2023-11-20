@@ -1,7 +1,7 @@
 import { styled } from "styled-components";
 import React, { useState, useContext } from "react";
 import axios from "axios";
-import { AccessTokenContext } from "./TokenContext";
+import { Link, useNavigate } from "react-router-dom";
 //초대 /갱신동의 거부 / 타이틀/ 여행일정 /
 const Form = styled.form`
   display: flex;
@@ -50,6 +50,7 @@ export default function ChatAddForm() {
   const [start, setStart] = useState("");
   const [end, setEnd] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const onChange_title = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -71,11 +72,11 @@ export default function ChatAddForm() {
   const onChange_password = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   };
-  const { accessToken } = useContext(AccessTokenContext);
+  //const { accessToken } = useContext(AccessTokenContext);
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    //console.log(accessToken);
+    const accessToken = localStorage.getItem("accessToken"); // 로컬 스토리지에서 액세스토큰 불러오기
+    console.log(accessToken);
     // 토큰이 없다면 추가 작업을 하지 않고 함수를 종료
     if (!accessToken) {
       console.log("No token found");
@@ -87,40 +88,42 @@ export default function ChatAddForm() {
       },
     };
 
-    // axios
-    //   .post(
-    //     //"http://localhost:8080/api/v1/chatrooms",
-    //     "http://localhost:3000/api/v1/chatrooms",
-    //     {
-    //       title: title,
-    //       spot: spot,
-    //       headcount: headcount,
-    //       start: start,
-    //       end: end,
-    //       password: password,
-    //     },
-    //     config
-    //   )
-    //   .then((res) => {
-    //     console.log(res.data);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+    axios
+      .post(
+        "http://44.218.133.175:8080/api/v1/chatrooms",
+        {
+          title: title,
+          spot: spot,
+          headcount: headcount,
+          start: start,
+          end: end,
+          password: password,
+        },
+        config
+      )
+      .then((res) => {
+        console.log(res);
 
-    const response = await axios.post(
-      "http://44.218.133.175:8080/api/v1/chatrooms",
-      //"http://localhost:3000/api/v1/chatrooms",
-      {
-        title: title,
-        spot: spot,
-        headcount: headcount,
-        start: start,
-        end: end,
-        password: password,
-      },
-      config
-    );
+        navigate("/chatrooms");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    // const response = await axios.post(
+    //   "http://44.218.133.175:8080/api/v1/chatrooms",
+    //   //"http://localhost:3000/api/ v1/chatrooms",
+    //   {
+    //     title: title,
+    //     spot: spot,
+    //     headcount: headcount,
+    //     start: start,
+    //     end: end,
+    //     password: password,
+    //   },
+    //   config
+    // );
+    //console.log(response.data);
     // setTitle(response.data);
     // setSpot(response.data);
     // setHeadcount(response.data);
