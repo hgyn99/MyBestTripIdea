@@ -38,7 +38,8 @@ export default function Chatroomlist() {
   //const { accessToken } = useContext(AccessTokenContext);
   const accessToken = localStorage.getItem("accessToken"); // 로컬 스토리지에서 액세스토큰 불러오기
   console.log("현재 토큰(챗룸타임라인): " + accessToken);
-  console.log(accessToken);
+
+  
   useEffect(() => {
     if (!accessToken) {
       console.log("No token found");
