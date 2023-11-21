@@ -1,10 +1,11 @@
 import React, { useEffect,useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import { AccessTokenContext } from "../components/TokenContext";
+
+
 const Invite = () => {
   const { chatroomId } = useParams();
-  const { accessToken } = useContext(AccessTokenContext);
+  const accessToken = localStorage.getItem("accessToken");
   useEffect(() => {
     
     if (!accessToken) {
@@ -23,8 +24,10 @@ const Invite = () => {
       (async () => {
         try {
           // axios.post를 await로 처리
-          const response = await axios.post(`https://yourserver.com/api/invite/${chatroomId}`, { password },config);
+          const response = await axios.post(`http://44.218.133.175:8080/api/v1/chatrooms/${chatroomId}/invite`, { chatroomId, password },config);
           console.log('서버 응답:', response.data);
+          console.log(chatroomId);
+          console.log(password);
           // 성공 처리 로직
         } catch (error) {
           console.error('서버 요청 실패:', error);

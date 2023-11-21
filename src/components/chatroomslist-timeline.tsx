@@ -38,6 +38,7 @@ export default function Chatroomlist() {
   //const { accessToken } = useContext(AccessTokenContext);
   const accessToken = localStorage.getItem("accessToken"); // 로컬 스토리지에서 액세스토큰 불러오기
   console.log("현재 토큰(챗룸타임라인): " + accessToken);
+  console.log(accessToken);
   useEffect(() => {
     if (!accessToken) {
       console.log("No token found");
@@ -48,12 +49,13 @@ export default function Chatroomlist() {
         Authorization: `Bearer ${accessToken}`,
       },
     };
-    console.log(accessToken);
+    
     axios
       .get("http://44.218.133.175:8080/api/v1/chatrooms", config)
       .then((res) => {
         if (Array.isArray(res.data.data.chatRoomInfos)) {
           setChatRooms(res.data.data.chatRoomInfos);
+          
         } else {
           console.log('Data is not an array:', res.data.data.chatRoomInfos);
           // 적절한 오류 처리 로직을 추가하세요.
