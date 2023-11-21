@@ -1,9 +1,10 @@
-import React, { useState } from "react";
-import { auth, db, storage } from "../firebase";
-import { collection, addDoc } from "firebase/firestore";
-import { Link, redirect } from "react-router-dom";
-import { styled } from "styled-components";
+import { Link } from "react-router-dom";
 import "../App.tsx";
+import { collection, addDoc, updateDoc, doc } from "firebase/firestore";
+import { useState, useEffect } from "react";
+import styled from "styled-components";
+import { auth, db, storage } from "../firebase";
+import Chatroom_Questions from "../components/chatroom_questions";
 
 // 왼쪽 틀
 const Lay = styled.div`
@@ -47,20 +48,9 @@ const MBTIBlock = styled.div`
 const Survey_explain = styled.div`
   color: black;
   font-family: "GmarketSansTTFMedium";
-  font-size: 30px;
+  font-size: 25px;
   text-align: center;
   margin-top: 200px;
-  list-style: none;
-  line-height: 150%;
-`;
-
-// 채팅방 이름 표시
-const Chatroom_title = styled.div`
-  color: black;
-  font-family: "Jalnan2TTF";
-  font-size: 56px;
-  text-align: left;
-  margin-left: 120px;
   list-style: none;
   line-height: 150%;
 `;
@@ -72,45 +62,43 @@ type Question = {
   options: string[];
 };
 
-const questions: Question[] = [
-  {
-    id: 1,
-    questionText: "Q: 여행 성향 1",
-    options: ["A", "B", "C", "D"],
-  },
-  {
-    id: 2,
-    questionText: "Q: 여행 성향 2",
-    options: ["A", "B", "C", "D"],
-  },
-  {
-    id: 3,
-    questionText: "Q: 여행 성향 3",
-    options: ["A", "B", "C", "D"],
-  },
-  {
-    id: 4,
-    questionText: "Q: 여행 성향 4",
-    options: ["A", "B", "C", "D"],
-  },
-  {
-    id: 5,
-    questionText: "Q: 여행 성향 5",
-    options: ["A", "B", "C", "D"],
-  },
-  {
-    id: 6,
-    questionText: "Q: 여행 성향 6",
-    options: ["A", "B", "C", "D"],
-  },
-  // 질문 추가 가능.
-];
+// const questions: Question[] = [
+//   {
+//     id: 1,
+//     questionText: "Q: 개인 성향 1",
+//     options: ["A", "B", "C", "D"],
+//   },
+//   {
+//     id: 2,
+//     questionText: "Q: 개인 성향 2",
+//     options: ["A", "B", "C", "D"],
+//   },
+//   {
+//     id: 3,
+//     questionText: "Q: 개인 성향 3",
+//     options: ["A", "B", "C", "D"],
+//   },
+//   {
+//     id: 4,
+//     questionText: "Q: 개인 성향 4",
+//     options: ["A", "B", "C", "D"],
+//   },
+//   {
+//     id: 5,
+//     questionText: "Q: 개인 성향 5",
+//     options: ["A", "B", "C", "D"],
+//   },
+//   {
+//     id: 6,
+//     questionText: "Q: 개인 성향 6",
+//     options: ["A", "B", "C", "D"],
+//   },
+//   // 질문 추가 가능.
+// ];
 
 // 질문 틀
 const QuestionFrame = styled.div`
-  //padding: 15px; // 안쪽 여백
   margin-bottom: 0px; // 바깥쪽 여백
-  //border-radius: 8px; // 모서리 둥글게
 `;
 
 // 질문 제목
@@ -128,7 +116,8 @@ const OptionsContainer = styled.div`
   flex-direction: row; // 가로 방향 배열
   justify-content: start; // 왼쪽 정렬
   margin-left: 50px;
-  margin-top: 1%;
+  margin-top: 2%;
+  margin-bottom: 1%; // 컨테이너 하단 여백
 `;
 
 // 선택지
@@ -175,7 +164,7 @@ export default function Survey() {
     const user = auth.currentUser;
     // Firestore에 데이터 저장
     try {
-      const doc = await addDoc(collection(db, "travel_survey_answers"), {
+      const doc = await addDoc(collection(db, "personal_survey_answers"), {
         createdAt: Date.now(),
         username: user?.displayName || "Anonymous",
         userId: user?.uid,
@@ -193,11 +182,12 @@ export default function Survey() {
       <Lay>
         <MBTIBlock>MBTI</MBTIBlock>
         <Survey_explain>
-          <li>어떤 여행을 원하는지</li> <li>알려주세요</li>
+          <li>보다 만족스러운 계획을 위해</li>
+          <li>자신의 성향을 기록해주세요</li>
         </Survey_explain>
       </Lay>
       <Divs>
-        <Chatroom_title>제주도 가자~</Chatroom_title>{" "}
+        {/* {" "}
         <form onSubmit={handleSubmit}>
           {questions.map((question) => (
             <QuestionFrame key={question.id}>
@@ -218,10 +208,11 @@ export default function Survey() {
               </OptionsContainer>
             </QuestionFrame>
           ))}
-          <Link to="/chat">
-            <StyledButton type="submit">제출하기</StyledButton>
-          </Link>
-        </form>
+
+          <StyledButton type="submit">제출하기</StyledButton>
+        </form> */}
+
+        <Chatroom_Questions />
       </Divs>
     </>
   );
