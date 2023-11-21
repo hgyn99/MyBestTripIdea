@@ -3,7 +3,7 @@ import axios from "axios";
 import styled from "styled-components";
 import { AccessTokenContext } from "../components/TokenContext";
 import { useNavigate } from "react-router-dom";
-
+import { ChatRoomContext } from "./ChatRoomContext";
 // 스타일 컴포넌트 정의 부분...
 
 // 질문 제목
@@ -98,7 +98,9 @@ const Chatroom_Questions: React.FC = () => {
   const progressBarWidth = ((currentPage + 1) / TOTAL_PAGES) * 100;
   const { accessToken } = useContext(AccessTokenContext);
   const navigate = useNavigate();
+  const { chatRoomId } = useContext(ChatRoomContext);
 
+  console.log(chatRoomId+"!!");
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");
     // 토큰이 없다면 추가 작업을 하지 않고 함수를 종료
@@ -175,7 +177,7 @@ const Chatroom_Questions: React.FC = () => {
     const postData = {
       result,
       version: 1,
-      chatRoomId: 1, // 실제 chatRoomId를 가져오도록 변경해야함
+      chatRoomId: chatRoomId, // 실제 chatRoomId를 가져오도록 변경해야함
     };
     const config = {
       headers: {
@@ -194,7 +196,7 @@ const Chatroom_Questions: React.FC = () => {
       .then((response) => {
         console.log("서버 응답:", response);
         // 성공적으로 제출되었을 때의 추가 동작(옵션)
-        navigate("/chat");
+        navigate("/chatrooms");
       })
       .catch((error) => {
         console.error("Error posting data: ", error);

@@ -108,7 +108,7 @@ export default function ChatAddForm() {
          const createdChatroomId = res.data.chatroomId;
          console.log("Created chatroom ID:", createdChatroomId);
          setChatroomId(createdChatroomId);
-         navigate('/invite');
+         navigate('/chatrooms');
          
        })
        .catch((err) => {

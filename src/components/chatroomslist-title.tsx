@@ -23,14 +23,25 @@ type StatusProps = {
 };
 const getStatusColor = (status: string): string => {
   switch (status) {
-    case "대기 중":
-      return "#F4F1F3";
-    case "성향 조사":
+    case "WAITING":
+      return "#968f8d";
+    case "SURVEY":
       return "#F2BDAF";
-    case "참여하기":
+    case "COMPLETE":
       return "#B5E2E9";
     default:
       return "#f2bdaf";
+  }
+};
+
+const getHoverStatusColor = (status: string): string => {
+  switch (status) {
+    case "SURVEY":
+      return "#E6B4A5"; // SURVEY 상태의 hover 색상
+    case "COMPLETE":
+      return "#9FD1DC"; // COMPLETE 상태의 hover 색상
+    default:
+      return getStatusColor(status); // 다른 상태에서는 기본 색상 사용
   }
 };
 const Status = styled.div<StatusProps>`
@@ -47,6 +58,18 @@ const Status = styled.div<StatusProps>`
   justify-content: center;
 `;
 
+const getStatusText = (status: string): string => {
+  switch (status) {
+    case "WAITING":
+      return "대기 중";
+    case "SURVEY":
+      return "설문 조사";
+    case "COMPLETE":
+      return "참여하기";
+    default:
+      return status; // 기본적으로 상태 값을 그대로 반환
+  }
+};
 const ParticipateButton = styled.button<StatusProps>`
   // 버튼 스타일
   background-color: ${(props) => getStatusColor(props.status)};
@@ -62,7 +85,7 @@ const ParticipateButton = styled.button<StatusProps>`
   justify-content: center;
   cursor: pointer;
   &:hover {
-    background-color: #a2cbd1; // 호버 시 배경색 변경
+    background-color: ${(props) => getHoverStatusColor(props.status)};
   }
 `;
 const ShareButton = styled.button`
@@ -93,7 +116,10 @@ export default function ChatRoomComponent({
   const handleJoinChat = () => {
     setChatroomId(chatroomId);
     console.log("채팅방에 참여합니다!", chatroomId);
-    navigate(`/chat`);
+    if(chatroomStatus==="SURVEY")
+      navigate(`/chatrooms-survey`);
+    else if(chatroomStatus==="COMPLETE")
+      navigate(`/chat`)
   };
 
   const handleShareChat = () => {
@@ -113,12 +139,12 @@ export default function ChatRoomComponent({
       <Title>{title}</Title>
       <div style={{ display: 'flex', alignItems: 'center' }}>
         <ShareButton onClick={handleShareChat} />
-        {chatroomStatus === "참여하기" ? (
+        {(chatroomStatus === "SURVEY" || chatroomStatus === "COMPLETE") ? (
           <ParticipateButton status={chatroomStatus} onClick={handleJoinChat}>
-            {chatroomStatus}
+            {getStatusText(chatroomStatus)} {/* 상태에 따른 텍스트 표시 */}
           </ParticipateButton>
         ) : (
-          <Status status={chatroomStatus}>{chatroomStatus}</Status>
+          <Status status={chatroomStatus}>{getStatusText(chatroomStatus)}</Status>
         )}
       </div>
     </Wrapper>

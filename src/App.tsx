@@ -93,7 +93,7 @@ const router = createBrowserRouter([
     element: <ChatroomsSurvey />,
   },
   {
-    path: "invite/:chatroomID",
+    path: "invite/:chatroomId",
     element: <Invite />,
   },
 ]);
