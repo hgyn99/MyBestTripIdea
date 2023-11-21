@@ -11,7 +11,6 @@ import {
   Title,
   Wrapper,
 } from "../components/auth-components";
-import GithubButton from "../components/github-btn";
 import styled from "styled-components";
 import axios from "axios";
 import { AccessTokenContext } from "../components/TokenContext";
@@ -39,7 +38,7 @@ const Background_left = styled.div`
 // 안내 문구
 const Explain = styled.div`
   color: black;
-  font-family: "GmarketSansTTFMedium";
+  font-family: "Jalnan2TTF";
   font-size: 30px;
   text-align: center;
   list-style: none;
@@ -144,7 +143,7 @@ export default function CreateAccount() {
             onChange={onChange}
             name="email"
             value={email}
-            placeholder="Email"
+            placeholder="이메일"
             type="email"
             required
           />
@@ -152,18 +151,16 @@ export default function CreateAccount() {
             onChange={onChange}
             value={password}
             name="password"
-            placeholder="Password"
+            placeholder="비밀번호"
             type="password"
             required
           />
-          <Input type="submit" value={isLoading ? "Loading..." : "Log in"} />
+          <Input type="submit" value={isLoading ? "로딩..." : "로그인"} />
         </Form>
         {error !== "" ? <Error>{error}</Error> : null}
         <Switcher>
-          Don't have an account?{" "}
-          <Link to="/create-account">Create one &rarr;</Link>
+          계정이 없으신가요? <Link to="/create-account">회원 가입 &rarr;</Link>
         </Switcher>
-        <GithubButton />
       </Divs>
     </Wrapper>
   );

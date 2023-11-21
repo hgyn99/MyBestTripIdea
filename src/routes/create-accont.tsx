@@ -9,12 +9,21 @@ import {
   Input,
   Switcher,
   Title,
-  Wrapper,
   Error,
 } from "../components/auth-components";
-import GithubButton from "../components/github-btn";
 import axios from "axios";
 import { AccessTokenContext } from "../components/TokenContext";
+import styled from "styled-components";
+
+const Wrapper = styled.div`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+`;
+
 export default function CreateAccount() {
   const navigate = useNavigate();
   const [isLoading, setLoading] = useState(false);
@@ -85,13 +94,13 @@ export default function CreateAccount() {
   };
   return (
     <Wrapper>
-      <Title>Join Twitter!</Title>
+      <Title>회원 가입</Title>
       <Form onSubmit={onSubmit}>
         <Input
           onChange={onChange}
           name="name"
           value={name}
-          placeholder="Name"
+          placeholder="이름"
           type="text"
           required
         />
@@ -99,7 +108,7 @@ export default function CreateAccount() {
           onChange={onChange}
           name="email"
           value={email}
-          placeholder="Email"
+          placeholder="이메일"
           type="email"
           required
         />
@@ -107,20 +116,16 @@ export default function CreateAccount() {
           onChange={onChange}
           name="password"
           value={password}
-          placeholder="Password"
+          placeholder="비밀번호"
           type="password"
           required
         />
-        <Input
-          type="submit"
-          value={isLoading ? "Loading..." : "Create Account"}
-        />
+        <Input type="submit" value={isLoading ? "Loading..." : "계정 생성"} />
       </Form>
       {error !== "" ? <Error>{error}</Error> : null}
       <Switcher>
-        Already have an account? <Link to="/login">login in &rarr;</Link>
+        이미 가입되어 있으신가요? <Link to="/login">로그인 &rarr;</Link>
       </Switcher>
-      <GithubButton />
     </Wrapper>
   );
 }
