@@ -166,7 +166,7 @@ const Chatroom_Questions: React.FC = () => {
       return;
     }
 
-    // 데이터 제출 로직
+    // 데이터 제출 로직 
     const result = questions
       .map((question) => question.selectedOption)
       .join(",");
