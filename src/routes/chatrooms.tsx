@@ -9,6 +9,7 @@ const Background = styled.div`
   width: 30%;
   height: 100%;
 `;
+//
 const TitleContainer = styled.div`
   display: flex;
   flex-direction: row;
