@@ -55,14 +55,16 @@ export default function CreateAccount() {
       console.log(password);
       // 사용자 데이터와 토큰을 서버로 전송
       const response = await axios.post(
-        "http://44.218.133.175:8080/api/v1/members/login",
+        "http://44.218.133.175:8080/api/v1/members/join",
         {
           name: name,
           email: email,
           password: password,
         }
       );
-
+      console.log(name);
+      console.log(email);
+      console.log(password);
       console.log(response);
       console.log(response.data.data.token.accessToken);
       setAccessToken(response.data.data.token.accessToken);

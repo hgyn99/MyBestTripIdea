@@ -39,8 +39,7 @@ export default function Chatroomlist() {
   const { accessToken } = useContext(AccessTokenContext);
 
   useEffect(() => {
-    
-    // 토큰이 없다면 추가 작업을 하지 않고 함수를 종료
+
     if (!accessToken) {
       console.log("No token found");
       return;
@@ -50,16 +49,22 @@ export default function Chatroomlist() {
         Authorization: `Bearer ${accessToken}`,
       },
     };
+    console.log(accessToken);
 
-    axios
-      .get("44.218.133.175:8080/api/v1/history", config)
+    axios.get("http://44.218.133.175:8080/api/v1/history", config)
       .then((res) => {
-        setHistoryID(res.data);
+        if (Array.isArray(res.data)) {
+          console.log(res.data);
+          setHistoryID(res.data);
+        } else {
+          console.log('Data is not an array:', res.data);
+          // 적절한 오류 처리 로직을 추가하세요.
+        }
       })
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  },[]);
  
 
   return (

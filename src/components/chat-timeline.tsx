@@ -87,7 +87,7 @@ export default function Timeline() {
         setMessage(messages);
       });
     };
-
+    
     fetchMessages();
 
     return () => {

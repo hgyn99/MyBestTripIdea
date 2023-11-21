@@ -1,7 +1,9 @@
 import { styled } from "styled-components";
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, } from "react";
 import axios from "axios";
 import { AccessTokenContext } from "./TokenContext";
+import {Outlet, Link, useNavigate} from "react-router-dom";
+import { ChatRoomContext } from "./ChatRoomContext";
 //초대 /갱신동의 거부 / 타이틀/ 여행일정 /
 const Form = styled.form`
   display: flex;
@@ -50,7 +52,7 @@ export default function ChatAddForm() {
   const [start, setStart] = useState("");
   const [end, setEnd] = useState("");
   const [password, setPassword] = useState("");
-
+  const navigate = useNavigate();
   const onChange_title = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     setTitle(e.target.value);
@@ -72,6 +74,7 @@ export default function ChatAddForm() {
     setPassword(e.target.value);
   };
   const { accessToken } = useContext(AccessTokenContext);
+  const { setChatroomId } = useContext(ChatRoomContext);
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -102,6 +105,11 @@ export default function ChatAddForm() {
        )
        .then((res) => {
          console.log(res);
+         const createdChatroomId = res.data.chatroomId;
+         console.log("Created chatroom ID:", createdChatroomId);
+         setChatroomId(createdChatroomId);
+         navigate('/invite');
+         
        })
        .catch((err) => {
          console.log(err);

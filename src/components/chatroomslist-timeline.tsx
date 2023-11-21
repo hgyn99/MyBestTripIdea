@@ -27,9 +27,14 @@ const Wrapper = styled.div`
   /* Firefox */
   scrollbar-width: none;
 `;
-
+const exampleData1 =
+{
+  chatroomId:1,
+  title:'완도 가자',
+  chatroomStatus:'참여하기',
+}
 export default function Chatroomlist() {
-  const [chatRooms, setChatRooms] = useState<ChatRoom[]>([]);
+  const [chatRooms, setChatRooms] = useState<ChatRoom[]>([exampleData1]);
   const { accessToken } = useContext(AccessTokenContext);
 
   useEffect(() => {
@@ -57,9 +62,10 @@ export default function Chatroomlist() {
         console.log(err);
       });
   }, [accessToken]);
-
+  
   return (
     <Wrapper>
+      
       {chatRooms.map((chatroom) => (
         <ChatRoom key={chatroom.chatroomId} {...chatroom} />
       ))}
