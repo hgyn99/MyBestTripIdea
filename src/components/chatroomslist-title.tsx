@@ -1,8 +1,8 @@
-import { ChatRoom } from "./chatroomslist-timeline";
+import React, { useContext } from "react";
 import styled from "styled-components";
-import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { ChatRoomContext } from "./ChatRoomContext";
+
 const Wrapper = styled.div`
   display: flex;
   color: black;
@@ -65,8 +65,24 @@ const ParticipateButton = styled.button<StatusProps>`
     background-color: #a2cbd1; // 호버 시 배경색 변경
   }
 `;
+const ShareButton = styled.button`
+  background-image: url("/sharebutton.svg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 70%;
+  width: 30px;
+  height: 30px;
+  border: none;
+  background-color:white;
+`;
 
-export default function ChatRoom({
+export interface ChatRoom {
+  chatroomId: number;
+  title: string;
+  chatroomStatus: string;
+}
+
+export default function ChatRoomComponent({
   chatroomId,
   title,
   chatroomStatus,
@@ -76,21 +92,35 @@ export default function ChatRoom({
 
   const handleJoinChat = () => {
     setChatroomId(chatroomId);
-    console.log("채팅방에 참여합니다!");
-    console.log(chatroomId);
+    console.log("채팅방에 참여합니다!", chatroomId);
     navigate(`/chat`);
+  };
+
+  const handleShareChat = () => {
+    setChatroomId(chatroomId);
+    const chatroomLink = `http://localhost:3000/invite/${chatroomId}`;
+    navigator.clipboard.writeText(chatroomLink)
+      .then(() => {
+        console.log('채팅방 링크가 클립보드에 복사되었습니다:', chatroomLink);
+      })
+      .catch(err => {
+        console.error('링크 복사에 실패했습니다:', err);
+      });
   };
 
   return (
     <Wrapper>
       <Title>{title}</Title>
-      {chatroomStatus === "참여하기" ? (
-        <ParticipateButton status={chatroomStatus} onClick={handleJoinChat}>
-          {chatroomStatus}
-        </ParticipateButton>
-      ) : (
-        <Status status={chatroomStatus}>{chatroomStatus}</Status>
-      )}
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        <ShareButton onClick={handleShareChat} />
+        {chatroomStatus === "참여하기" ? (
+          <ParticipateButton status={chatroomStatus} onClick={handleJoinChat}>
+            {chatroomStatus}
+          </ParticipateButton>
+        ) : (
+          <Status status={chatroomStatus}>{chatroomStatus}</Status>
+        )}
+      </div>
     </Wrapper>
   );
 }

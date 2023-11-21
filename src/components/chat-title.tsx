@@ -37,7 +37,7 @@ export default function SendMessageForm() {
     };
     axios
       .get(
-        "http://44.218.133.175:8080/api/v1/chatrooms/${chatroomId}/title",
+        `http://44.218.133.175:8080/api/v1/chatrooms/${chatRoomId}/title`,
         config
       )
       .then((res) => {
@@ -47,6 +47,5 @@ export default function SendMessageForm() {
         console.log(err);
       });
   }, [chatRoomId]);
-
   return <Title>{title}</Title>;
 }

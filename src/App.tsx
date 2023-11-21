@@ -16,6 +16,7 @@ import ChatAdd from "./routes/chatadd";
 import Intro from "./routes/intro";
 import Survey from "./routes/survey";
 import History from "./routes/history";
+import Invite from "./routes/invite";
 import ChatroomsSurvey from "./routes/chatrooms-survey";
 // 폰트 추가
 import GmarketSansTTFBold from "./fonts/GmarketSansTTFBold.ttf";
@@ -54,6 +55,7 @@ const router = createBrowserRouter([
         path: "History",
         element: <History />,
       },
+
     ],
   },
   {
@@ -89,6 +91,10 @@ const router = createBrowserRouter([
   {
     path: "chatrooms-survey",
     element: <ChatroomsSurvey />,
+  },
+  {
+    path: "invite/:chatroomID",
+    element: <Invite />,
   },
 ]);
 
