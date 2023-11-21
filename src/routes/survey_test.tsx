@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
 import { AccessTokenContext } from "../components/TokenContext";
@@ -95,7 +96,19 @@ const Survey_test: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const progressBarWidth = ((currentPage + 1) / TOTAL_PAGES) * 100;
   const { accessToken } = useContext(AccessTokenContext);
+  const navigate = useNavigate();
 
+  // 영어 옵션을 한글로 변환하는 매핑
+  const translateOption = (option: string): string => {
+    const translationMap: { [key: string]: string } = {
+      STRONGLY_AGREE: "매우 동의한다.",
+      AGREE: "동의한다.",
+      NEURAL: "보통이다.",
+      DISAGREE: "동의하지 않는다.",
+      STRONGLY_DISAGREE: "매우 동의하지 않는다.",
+    };
+    return translationMap[option] || option;
+  };
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken"); // 로컬 스토리지에서 액세스토큰 불러오기
     //console.log(accessToken);
@@ -110,16 +123,16 @@ const Survey_test: React.FC = () => {
       },
     };
     axios
-      //.get("http:44.218.133.175:8080/api/v1/members/survey/1", config)
-      .get("http://localhost:4000/api/v1/members/survey/1")
+      .get("http://44.218.133.175:8080/api/v1/members/survey/1", config)
+      //.get("http://localhost:4000/api/v1/members/survey/1")
       .then((response) => {
-        console.log(response.data);
-        const loadedQuestions = response.data.map(
-          (item: any, index: number) => ({
+        console.log(response.data.data);
+        const loadedQuestions = response.data.data.questions.map(
+          (questionText: string, index: number) => ({
             id: index + 1,
-            text: item.questions,
-            options: item.answers,
-            selectedOption: item.selectedAnswer,
+            text: questionText,
+            options: response.data.data.answers.map(translateOption),
+            selectedOption: "",
           })
         );
         setQuestions(loadedQuestions);
@@ -155,27 +168,21 @@ const Survey_test: React.FC = () => {
   const optionToNumber = (option: string): number => {
     switch (option) {
       case "매우 동의한다.":
-        return 1;
+        return 5;
       case "동의한다.":
-        return 2;
+        return 4;
       case "보통이다.":
         return 3;
       case "동의하지 않는다.":
-        return 4;
+        return 2;
       case "매우 동의하지 않는다.":
-        return 5;
+        return 1;
       default:
         return 0; // 옵션이 선택되지 않은 경우
     }
   };
 
   const handleSubmit = () => {
-    // const submittedAnswers = questions.map(({ id, selectedOption }) => ({
-    //   id,
-    //   selectedOption,
-    // }));
-
-    // console.log("제출된 답변:", submittedAnswers);
     // 여기에 서버로 데이터 전송하는 로직을 추가할 수 있습니다.
 
     // 선택된 옵션을 숫자로 변환하여 배열로 만듦
@@ -184,23 +191,32 @@ const Survey_test: React.FC = () => {
     );
 
     // 배열을 쉼표로 구분된 문자열로 변환
-    const surveyResultString = surveyResultNumbers.join(",");
-    console.log("surveyResult: ", surveyResultString); // 로그로 결과 확인
+    const surveyResult = surveyResultNumbers.join(",");
+    console.log("surveyResult: ", surveyResult); // 로그로 결과 확인
+
+    const postData = {
+      surveyResult,
+      surveyVersion: 1, // 'surveyVersion' 추가
+    };
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`, // 액세스 토큰 추가
+      },
+    };
     // 데이터를 서버에 POST
     axios
       .post(
-        "http:44.218.133.175:8080/api/v1/members/survey/1",
+        "http://44.218.133.175:8080/api/v1/members/survey",
         //"http://localhost:4000/api/v1/members/survey/1",
-        JSON.stringify({ surveyResultString }), // 데이터를 JSON 문자열로 변환
-        {
-          headers: {
-            "Content-Type": "application/json", // 헤더에 Content-Type 설정
-          },
-        }
+        JSON.stringify(postData), // 데이터를 JSON 문자열로 변환
+        config
       )
       .then((response) => {
         console.log("서버 응답:", response);
         // 성공적으로 제출되었을 때의 추가 동작(옵션)
+        navigate("/chatrooms");
       })
       .catch((error) => {
         console.error("Error posting data: ", error);

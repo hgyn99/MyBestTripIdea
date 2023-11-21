@@ -117,7 +117,7 @@ export default function CreateAccount() {
       );
       setAccessToken(response.data.data.token.accessToken);
       localStorage.setItem("accessToken", response.data.data.token.accessToken); // 새로고침해도 토큰 저장
-      navigate("/survey");
+      navigate("/chatrooms");
     } catch (e) {
       if (e instanceof FirebaseError) {
         setError(e.message);

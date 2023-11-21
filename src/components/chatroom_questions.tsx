@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import styled from "styled-components";
 import { AccessTokenContext } from "../components/TokenContext";
+import { useNavigate } from "react-router-dom";
 
 // 스타일 컴포넌트 정의 부분...
 
@@ -17,9 +18,8 @@ const QuestionTitle = styled.h3`
 // 선택지 컨테이너
 const OptionsContainer = styled.div`
   display: flex; // flex 레이아웃 사용
-  flex-direction: row; // 가로 방향 배열
+  flex-direction: column; // 가로 방향 배열
   justify-content: start; // 왼쪽 정렬
-  margin-left: 50px;
   margin-top: 2%;
   margin-bottom: 1%; // 컨테이너 하단 여백
 `;
@@ -97,29 +97,43 @@ const Chatroom_Questions: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const progressBarWidth = ((currentPage + 1) / TOTAL_PAGES) * 100;
   const { accessToken } = useContext(AccessTokenContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");
+    // 토큰이 없다면 추가 작업을 하지 않고 함수를 종료
+    if (!accessToken) {
+      console.log("No token found");
+      return;
+    }
     const config = {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
     };
     axios
-      .get("http://localhost:4000/api/v1/chatrooms/survey/1")
+      //.get("http://localhost:4000/api/v1/chatrooms/survey/1")
+      .get("http://44.218.133.175:8080/api/v1/chatrooms/survey/1", config)
       .then((response) => {
-        const loadedQuestions = response.data.map(
-          (item: any, index: number) => ({
+        const surveyData = response.data.data.survey;
+        console.log(response.data.data.survey);
+        const loadedQuestions = Object.keys(surveyData).map((key, index) => {
+          // 값이 문자열인지 확인하고, 아니라면 문자열로 변환
+          const options =
+            typeof surveyData[key] === "string"
+              ? surveyData[key].split(",")
+              : String(surveyData[key]).split(",");
+          return {
             id: index + 1,
-            text: item.question,
-            options: item.answers,
+            text: key,
+            options: options,
             selectedOption: "",
-          })
-        );
+          };
+        });
         setQuestions(loadedQuestions);
       })
       .catch((error) => console.error("Error fetching data: ", error));
-  }, []);
+  }, [accessToken]);
 
   const handleAnswerChange = (questionId: number, selectedOption: string) => {
     const updatedQuestions = questions.map((question) =>
@@ -145,30 +159,46 @@ const Chatroom_Questions: React.FC = () => {
   };
 
   const handleSubmit = () => {
+    const accessToken = localStorage.getItem("accessToken");
+    // 토큰이 없다면 추가 작업을 하지 않고 함수를 종료
+    if (!accessToken) {
+      console.log("No token found");
+      return;
+    }
+
     // 데이터 제출 로직
-    const surveyResult = questions
+    const result = questions
       .map((question) => question.selectedOption)
       .join(",");
-    console.log("surveyResult: ", surveyResult);
+    console.log("surveyResult: ", result);
 
+    const postData = {
+      result,
+      version: 1,
+      chatRoomId: 1, // 실제 chatRoomId를 가져오도록 변경해야함
+    };
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+    };
     // 데이터를 서버에 POST
     axios
       .post(
-        "http:44.218.133.175:8080/api/v1/chatrooms/survey/1",
+        "http://44.218.133.175:8080/api/v1/chatrooms/survey",
         //"http://localhost:4000/api/v1/chatrooms/survey/1",
-        JSON.stringify({ surveyResult }), // 데이터를 JSON 문자열로 변환
-        {
-          headers: {
-            "Content-Type": "application/json", // 헤더에 Content-Type 설정
-          },
-        }
+        JSON.stringify(postData), // 데이터를 JSON 문자열로 변환
+        config
       )
       .then((response) => {
         console.log("서버 응답:", response);
         // 성공적으로 제출되었을 때의 추가 동작(옵션)
+        navigate("/chat");
       })
       .catch((error) => {
         console.error("Error posting data: ", error);
+        console.log(accessToken);
       });
   };
 
