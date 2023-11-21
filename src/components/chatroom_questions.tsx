@@ -26,11 +26,11 @@ const OptionsContainer = styled.div`
 
 // 선택지
 const OptionLabel = styled.label`
-  display: inline-block; // 블록 레벨 요소로 변경
-  margin-right: 30px; // 각 옵션 사이의 여백
-  font-family: "Jalnan2TTF";
-  font-size: 15px; // 폰트 크기
-  color: gray;
+  display: block; // 블록 레벨 요소로 변경
+  margin-top: 10px; // 각 옵션 사이의 여백
+  font-family: "GmarketSansTTFLight";
+  font-size: 16px; // 폰트 크기
+  color: black;
   cursor: pointer; // 마우스 오버 시 커서 변경
 `;
 
@@ -151,7 +151,25 @@ const Chatroom_Questions: React.FC = () => {
       .join(",");
     console.log("surveyResult: ", surveyResult);
 
-    // 이곳에 서버에 제출하는 axios POST 요청을 추가하세요.
+    // 데이터를 서버에 POST
+    axios
+      .post(
+        "http:44.218.133.175:8080/api/v1/chatrooms/survey/1",
+        //"http://localhost:4000/api/v1/chatrooms/survey/1",
+        JSON.stringify({ surveyResult }), // 데이터를 JSON 문자열로 변환
+        {
+          headers: {
+            "Content-Type": "application/json", // 헤더에 Content-Type 설정
+          },
+        }
+      )
+      .then((response) => {
+        console.log("서버 응답:", response);
+        // 성공적으로 제출되었을 때의 추가 동작(옵션)
+      })
+      .catch((error) => {
+        console.error("Error posting data: ", error);
+      });
   };
 
   return (

@@ -24,10 +24,10 @@ const OptionsContainer = styled.div`
 
 // 선택지
 const OptionLabel = styled.label`
-  display: inline-block; // 블록 레벨 요소로 변경
-  margin-right: 30px; // 각 옵션 사이의 여백
-  font-family: "Jalnan2TTF";
-  font-size: 15px; // 폰트 크기
+  display: block; // 블록 레벨 요소로 변경
+  margin-top: 10px; // 각 옵션 사이의 여백
+  font-family: "GmarketSansTTFLight";
+  font-size: 16px; // 폰트 크기
   color: gray;
   cursor: pointer; // 마우스 오버 시 커서 변경
 `;
@@ -68,8 +68,8 @@ interface Question {
   selectedOption: string;
 }
 
-const QUESTIONS_PER_PAGE = 5;
-const TOTAL_PAGES = 4;
+const QUESTIONS_PER_PAGE = 2;
+const TOTAL_PAGES = 10;
 // Progress Bar 스타일 컴포넌트
 interface ProgressBarProps {
   width: number;
@@ -152,6 +152,23 @@ const Survey_test: React.FC = () => {
     (question) => question.selectedOption !== ""
   );
 
+  const optionToNumber = (option: string): number => {
+    switch (option) {
+      case "매우 동의한다.":
+        return 1;
+      case "동의한다.":
+        return 2;
+      case "보통이다.":
+        return 3;
+      case "동의하지 않는다.":
+        return 4;
+      case "매우 동의하지 않는다.":
+        return 5;
+      default:
+        return 0; // 옵션이 선택되지 않은 경우
+    }
+  };
+
   const handleSubmit = () => {
     // const submittedAnswers = questions.map(({ id, selectedOption }) => ({
     //   id,
@@ -161,18 +178,20 @@ const Survey_test: React.FC = () => {
     // console.log("제출된 답변:", submittedAnswers);
     // 여기에 서버로 데이터 전송하는 로직을 추가할 수 있습니다.
 
-    // 모든 선택된 옵션을 하나의 문자열로 결합
-    const surveyResult = questions
-      .map((question) => question.selectedOption)
-      .join(",");
-    console.log("surveyResult: ", surveyResult); // 이 로그를 통해 surveyResult의 내용을 확인
+    // 선택된 옵션을 숫자로 변환하여 배열로 만듦
+    const surveyResultNumbers = questions.map((question) =>
+      optionToNumber(question.selectedOption)
+    );
 
+    // 배열을 쉼표로 구분된 문자열로 변환
+    const surveyResultString = surveyResultNumbers.join(",");
+    console.log("surveyResult: ", surveyResultString); // 로그로 결과 확인
     // 데이터를 서버에 POST
     axios
       .post(
         "http:44.218.133.175:8080/api/v1/members/survey/1",
         //"http://localhost:4000/api/v1/members/survey/1",
-        JSON.stringify({ surveyResult }), // 데이터를 JSON 문자열로 변환
+        JSON.stringify({ surveyResultString }), // 데이터를 JSON 문자열로 변환
         {
           headers: {
             "Content-Type": "application/json", // 헤더에 Content-Type 설정
@@ -228,7 +247,7 @@ const Survey_test: React.FC = () => {
           다음
         </StyledButton>
       )}
-      {currentPage == 3 && (
+      {currentPage == TOTAL_PAGES - 1 && (
         <StyledButton onClick={handleSubmit} disabled={!allAnswered}>
           제출
         </StyledButton>
