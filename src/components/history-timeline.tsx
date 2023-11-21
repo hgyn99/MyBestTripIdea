@@ -39,7 +39,6 @@ export default function Chatroomlist() {
   const { accessToken } = useContext(AccessTokenContext);
 
   useEffect(() => {
-
     if (!accessToken) {
       console.log("No token found");
       return;

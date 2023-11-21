@@ -62,40 +62,6 @@ type Question = {
   options: string[];
 };
 
-// const questions: Question[] = [
-//   {
-//     id: 1,
-//     questionText: "Q: 개인 성향 1",
-//     options: ["A", "B", "C", "D"],
-//   },
-//   {
-//     id: 2,
-//     questionText: "Q: 개인 성향 2",
-//     options: ["A", "B", "C", "D"],
-//   },
-//   {
-//     id: 3,
-//     questionText: "Q: 개인 성향 3",
-//     options: ["A", "B", "C", "D"],
-//   },
-//   {
-//     id: 4,
-//     questionText: "Q: 개인 성향 4",
-//     options: ["A", "B", "C", "D"],
-//   },
-//   {
-//     id: 5,
-//     questionText: "Q: 개인 성향 5",
-//     options: ["A", "B", "C", "D"],
-//   },
-//   {
-//     id: 6,
-//     questionText: "Q: 개인 성향 6",
-//     options: ["A", "B", "C", "D"],
-//   },
-//   // 질문 추가 가능.
-// ];
-
 // 질문 틀
 const QuestionFrame = styled.div`
   margin-bottom: 0px; // 바깥쪽 여백
@@ -187,31 +153,6 @@ export default function Survey() {
         </Survey_explain>
       </Lay>
       <Divs>
-        {/* {" "}
-        <form onSubmit={handleSubmit}>
-          {questions.map((question) => (
-            <QuestionFrame key={question.id}>
-              <QuestionTitle>{question.questionText}</QuestionTitle>
-              <OptionsContainer>
-                {question.options.map((option) => (
-                  <OptionLabel key={option}>
-                    <RadioBoxInput
-                      type="radio"
-                      name={`question-${question.id}`}
-                      value={option}
-                      checked={answers[question.id] === option}
-                      onChange={() => handleOptionChange(question.id, option)}
-                    />
-                    {option}
-                  </OptionLabel>
-                ))}
-              </OptionsContainer>
-            </QuestionFrame>
-          ))}
-
-          <StyledButton type="submit">제출하기</StyledButton>
-        </form> */}
-
         <Survey_test />
       </Divs>
     </>

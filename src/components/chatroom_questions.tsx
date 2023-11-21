@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
 import { AccessTokenContext } from "../components/TokenContext";
+import { useNavigate } from "react-router-dom";
+
+// 스타일 컴포넌트 정의 부분...
 
 // 질문 제목
 const QuestionTitle = styled.h3`
@@ -16,9 +18,8 @@ const QuestionTitle = styled.h3`
 // 선택지 컨테이너
 const OptionsContainer = styled.div`
   display: flex; // flex 레이아웃 사용
-  flex-direction: row; // 가로 방향 배열
+  flex-direction: column; // 가로 방향 배열
   justify-content: start; // 왼쪽 정렬
-  margin-left: 50px;
   margin-top: 2%;
   margin-bottom: 1%; // 컨테이너 하단 여백
 `;
@@ -29,7 +30,7 @@ const OptionLabel = styled.label`
   margin-top: 10px; // 각 옵션 사이의 여백
   font-family: "GmarketSansTTFLight";
   font-size: 16px; // 폰트 크기
-  color: gray;
+  color: black;
   cursor: pointer; // 마우스 오버 시 커서 변경
 `;
 
@@ -62,16 +63,6 @@ const QuestionText = styled.span`
   padding: 3px; // 텍스트 주변에 여백을 추가
 `;
 
-interface Question {
-  id: number;
-  text: string;
-  options: string[];
-  selectedOption: string;
-}
-
-const QUESTIONS_PER_PAGE = 2;
-const TOTAL_PAGES = 10;
-// Progress Bar 스타일 컴포넌트
 interface ProgressBarProps {
   width: number;
 }
@@ -91,27 +82,25 @@ const ProgressBar = styled.div<ProgressBarProps>`
   transition: width 0.3s ease-in-out;
 `;
 
-const Survey_test: React.FC = () => {
+interface Question {
+  id: number;
+  text: string;
+  options: string[];
+  selectedOption: string;
+}
+
+const QUESTIONS_PER_PAGE = 2;
+const TOTAL_PAGES = 5;
+
+const Chatroom_Questions: React.FC = () => {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentPage, setCurrentPage] = useState(0);
   const progressBarWidth = ((currentPage + 1) / TOTAL_PAGES) * 100;
   const { accessToken } = useContext(AccessTokenContext);
   const navigate = useNavigate();
 
-  // 영어 옵션을 한글로 변환하는 매핑
-  const translateOption = (option: string): string => {
-    const translationMap: { [key: string]: string } = {
-      STRONGLY_AGREE: "매우 동의한다.",
-      AGREE: "동의한다.",
-      NEURAL: "보통이다.",
-      DISAGREE: "동의하지 않는다.",
-      STRONGLY_DISAGREE: "매우 동의하지 않는다.",
-    };
-    return translationMap[option] || option;
-  };
   useEffect(() => {
-    const accessToken = localStorage.getItem("accessToken"); // 로컬 스토리지에서 액세스토큰 불러오기
-    //console.log(accessToken);
+    const accessToken = localStorage.getItem("accessToken");
     // 토큰이 없다면 추가 작업을 하지 않고 함수를 종료
     if (!accessToken) {
       console.log("No token found");
@@ -123,24 +112,28 @@ const Survey_test: React.FC = () => {
       },
     };
     axios
-      .get("http://44.218.133.175:8080/api/v1/members/survey/1", config)
-      //.get("http://localhost:4000/api/v1/members/survey/1")
+      //.get("http://localhost:4000/api/v1/chatrooms/survey/1")
+      .get("http://44.218.133.175:8080/api/v1/chatrooms/survey/1", config)
       .then((response) => {
-        console.log(response.data.data);
-        const loadedQuestions = response.data.data.questions.map(
-          (questionText: string, index: number) => ({
+        const surveyData = response.data.data.survey;
+        console.log(response.data.data.survey);
+        const loadedQuestions = Object.keys(surveyData).map((key, index) => {
+          // 값이 문자열인지 확인하고, 아니라면 문자열로 변환
+          const options =
+            typeof surveyData[key] === "string"
+              ? surveyData[key].split(",")
+              : String(surveyData[key]).split(",");
+          return {
             id: index + 1,
-            text: questionText,
-            options: response.data.data.answers.map(translateOption),
+            text: key,
+            options: options,
             selectedOption: "",
-          })
-        );
+          };
+        });
         setQuestions(loadedQuestions);
       })
-      .catch((error) => {
-        console.error("Error fetching data: ", error);
-      });
-  }, []);
+      .catch((error) => console.error("Error fetching data: ", error));
+  }, [accessToken]);
 
   const handleAnswerChange = (questionId: number, selectedOption: string) => {
     const updatedQuestions = questions.map((question) =>
@@ -148,10 +141,6 @@ const Survey_test: React.FC = () => {
     );
     setQuestions(updatedQuestions);
   };
-
-  //const TOTAL_PAGES = Math.ceil(questions.length / QUESTIONS_PER_PAGE);
-  //console.log("questions.length: " + questions.length);
-  //console.log("QUESTIONS_PER_PAGE: " + QUESTIONS_PER_PAGE);
 
   const isPageComplete = () => {
     const startIndex = currentPage * QUESTIONS_PER_PAGE;
@@ -165,70 +154,57 @@ const Survey_test: React.FC = () => {
     (question) => question.selectedOption !== ""
   );
 
-  const optionToNumber = (option: string): number => {
-    switch (option) {
-      case "매우 동의한다.":
-        return 5;
-      case "동의한다.":
-        return 4;
-      case "보통이다.":
-        return 3;
-      case "동의하지 않는다.":
-        return 2;
-      case "매우 동의하지 않는다.":
-        return 1;
-      default:
-        return 0; // 옵션이 선택되지 않은 경우
-    }
+  const handleNextPage = () => {
+    if (currentPage < TOTAL_PAGES - 1) setCurrentPage(currentPage + 1);
   };
 
   const handleSubmit = () => {
-    // 여기에 서버로 데이터 전송하는 로직을 추가할 수 있습니다.
+    const accessToken = localStorage.getItem("accessToken");
+    // 토큰이 없다면 추가 작업을 하지 않고 함수를 종료
+    if (!accessToken) {
+      console.log("No token found");
+      return;
+    }
 
-    // 선택된 옵션을 숫자로 변환하여 배열로 만듦
-    const surveyResultNumbers = questions.map((question) =>
-      optionToNumber(question.selectedOption)
-    );
-
-    // 배열을 쉼표로 구분된 문자열로 변환
-    const surveyResult = surveyResultNumbers.join(",");
-    console.log("surveyResult: ", surveyResult); // 로그로 결과 확인
+    // 데이터 제출 로직 
+    const result = questions
+      .map((question) => question.selectedOption)
+      .join(",");
+    console.log("surveyResult: ", result);
 
     const postData = {
-      surveyResult,
-      surveyVersion: 1, // 'surveyVersion' 추가
+      result,
+      version: 1,
+      chatRoomId: 1, // 실제 chatRoomId를 가져오도록 변경해야함
     };
-
     const config = {
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`, // 액세스 토큰 추가
+        Authorization: `Bearer ${accessToken}`,
       },
     };
     // 데이터를 서버에 POST
     axios
       .post(
-        "http://44.218.133.175:8080/api/v1/members/survey",
-        //"http://localhost:4000/api/v1/members/survey/1",
+        "http://44.218.133.175:8080/api/v1/chatrooms/survey",
+        //"http://localhost:4000/api/v1/chatrooms/survey/1",
         JSON.stringify(postData), // 데이터를 JSON 문자열로 변환
         config
       )
       .then((response) => {
         console.log("서버 응답:", response);
         // 성공적으로 제출되었을 때의 추가 동작(옵션)
-        navigate("/chatrooms");
+        navigate("/chat");
       })
       .catch((error) => {
         console.error("Error posting data: ", error);
+        console.log(accessToken);
       });
-  };
-
-  const handleNextPage = () => {
-    if (currentPage < TOTAL_PAGES - 1) setCurrentPage(currentPage + 1);
   };
 
   return (
     <div>
+      {/* ProgressBar와 질문 목록 */}
       <ProgressBarContainer>
         <ProgressBar width={progressBarWidth} />
       </ProgressBarContainer>
@@ -263,7 +239,7 @@ const Survey_test: React.FC = () => {
           다음
         </StyledButton>
       )}
-      {currentPage == TOTAL_PAGES - 1 && (
+      {currentPage === TOTAL_PAGES - 1 && (
         <StyledButton onClick={handleSubmit} disabled={!allAnswered}>
           제출
         </StyledButton>
@@ -272,4 +248,4 @@ const Survey_test: React.FC = () => {
   );
 };
 
-export default Survey_test;
+export default Chatroom_Questions;

@@ -107,15 +107,17 @@ export default function CreateAccount() {
       const response = await axios.post(
         "http://44.218.133.175:8080/api/v1/members/login",
         {
-          name,
-          email,
-          password,
-        } 
+          email: email,
+          password: password,
+        }
       );
-      
+
+      console.log(
+        email + "의 토큰(로그인): " + response.data.data.token.accessToken
+      );
       setAccessToken(response.data.data.token.accessToken);
-      console.log(response.data.data.token.accessToken);
-      navigate("/survey");
+      localStorage.setItem("accessToken", response.data.data.token.accessToken); // 새로고침해도 토큰 저장
+      navigate("/chatrooms");
     } catch (e) {
       if (e instanceof FirebaseError) {
         setError(e.message);

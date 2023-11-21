@@ -77,8 +77,8 @@ export default function ChatAddForm() {
   const { setChatroomId } = useContext(ChatRoomContext);
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    //console.log(accessToken);
+    const accessToken = localStorage.getItem("accessToken"); // 로컬 스토리지에서 액세스토큰 불러오기
+    console.log(accessToken);
     // 토큰이 없다면 추가 작업을 하지 않고 함수를 종료
     if (!accessToken) {
       console.log("No token found");
@@ -114,20 +114,35 @@ export default function ChatAddForm() {
        .catch((err) => {
          console.log(err);
        });
+    
 
-    /*const response = await axios.post(
-      "http://44.218.133.175:8080/api/v1/chatrooms",
-      //"http://localhost:3000/api/v1/chatrooms",
-      {
-        title: title,
-        spot: spot,
-        headcount: headcount,
-        start: start,
-        end: end,
-        password: password,
-      },
-      config
-    );*/
+    // const response = await axios.post(
+    //   "http://44.218.133.175:8080/api/v1/chatrooms",
+    //   //"http://localhost:3000/api/ v1/chatrooms",
+    //   {
+    //     title: title,
+    //     spot: spot,
+    //     headcount: headcount,
+    //     start: start,
+    //     end: end,
+    //     password: password,
+    //   },
+    //   config
+    // );
+    //console.log(response.data);
+    // setTitle(response.data);
+    // setSpot(response.data);
+    // setHeadcount(response.data);
+    // setStart(response.data);
+    // setEnd(response.data);
+    // setPassword(response.data);
+
+    // setTitle("");
+    // setSpot("");
+    // setHeadcount("");
+    // setStart("");
+    // setEnd("");
+    // setPassword("");
   };
   return (
     <>

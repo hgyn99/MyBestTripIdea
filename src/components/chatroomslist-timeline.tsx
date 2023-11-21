@@ -35,8 +35,9 @@ const exampleData1 =
 }
 export default function Chatroomlist() {
   const [chatRooms, setChatRooms] = useState<ChatRoom[]>([exampleData1]);
-  const { accessToken } = useContext(AccessTokenContext);
-
+  //const { accessToken } = useContext(AccessTokenContext);
+  const accessToken = localStorage.getItem("accessToken"); // 로컬 스토리지에서 액세스토큰 불러오기
+  console.log("현재 토큰(챗룸타임라인): " + accessToken);
   useEffect(() => {
     if (!accessToken) {
       console.log("No token found");
@@ -59,7 +60,7 @@ export default function Chatroomlist() {
         }
       })
       .catch((err) => {
-        console.log(err);
+        console.log("에러" + err);
       });
   }, [accessToken]);
   
