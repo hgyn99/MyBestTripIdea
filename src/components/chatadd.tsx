@@ -1,8 +1,8 @@
 import { styled } from "styled-components";
-import React, { useState, useContext, } from "react";
+import React, { useState, useContext } from "react";
 import axios from "axios";
 import { AccessTokenContext } from "./TokenContext";
-import {Outlet, Link, useNavigate} from "react-router-dom";
+import { Outlet, Link, useNavigate } from "react-router-dom";
 import { ChatRoomContext } from "./ChatRoomContext";
 //초대 /갱신동의 거부 / 타이틀/ 여행일정 /
 const Form = styled.form`
@@ -90,31 +90,29 @@ export default function ChatAddForm() {
       },
     };
 
-     axios
-       .post(
-         "http://44.218.133.175:8080/api/v1/chatrooms",
-         {
-           title: title,
-           spot: spot,
-           headcount: headcount,
-           start: start,
-           end: end,
-           password: password,
-         },
-         config
-       )
-       .then((res) => {
-         console.log(res);
-         const createdChatroomId = res.data.chatroomId;
-         console.log("Created chatroom ID:", createdChatroomId);
-         setChatroomId(createdChatroomId);
-         navigate('/chatrooms');
-         
-       })
-       .catch((err) => {
-         console.log(err);
-       });
-    
+    axios
+      .post(
+        "http://44.218.133.175:8080/api/v1/chatrooms",
+        {
+          title: title,
+          spot: spot,
+          headcount: headcount,
+          start: start,
+          end: end,
+          password: password,
+        },
+        config
+      )
+      .then((res) => {
+        // console.log(res);
+        // const createdChatroomId = res.data.data.chatRoomInfos.chatroomId;
+        // console.log("Created chatroom ID:", createdChatroomId);
+        // setChatroomId(createdChatroomId);
+        navigate("/chatrooms");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
 
     // const response = await axios.post(
     //   "http://44.218.133.175:8080/api/v1/chatrooms",

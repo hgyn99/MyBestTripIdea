@@ -150,15 +150,8 @@ export default function Layout() {
   const [day, setDay] = useState(1);
   const [voteResult, setvoteResult] = useState({});
   const [isCompleted, setIsCompleted] = useState(false); // true 일때만 완료 버튼이 보임
-  const [roomManagerUid, setRoomManagerUid] = useState(null); // 방장의 uid를 저장할 상태
-
-  const onLogOut = async () => {
-    const ok = confirm("Are you sure you want to log out?");
-    if (ok) {
-      await auth.signOut();
-      navigate("/login");
-    }
-  };
+  const [ManagerId, setManagerId] = useState(null); // 방장의 uid를 저장할 상태
+  const [spots, setSpots] = useState([]); // 여행지 데이터를 저장할 상태 변수
 
   const handleNextDay = () => {
     setDay((prevDay) => prevDay + 1);
@@ -186,18 +179,38 @@ export default function Layout() {
 
   // RefreshButton 클릭 시 호출될 이벤트 핸들러
   const handleRefresh = async () => {
+    const accessToken = localStorage.getItem("accessToken"); // 로컬 스토리지에서 액세스토큰 불러오기
+    console.log(accessToken);
+    // 토큰이 없다면 추가 작업을 하지 않고 함수를 종료
+    if (!accessToken) {
+      console.log("No token found");
+      return;
+    }
+    const config = {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    };
+
     try {
       const chatroomId = "your_chatroom_id"; // 받아온 chatroomId로 교체
       const response = await axios.get(
-        `http://44.218.133.175:8080/api/v1/chatrooms/${chatroomId}/recommendation`
+        //`http://44.218.133.175:8080/api/v1/chatrooms/${chatroomId}/recommendation`
+        `http://44.218.133.175:8080/api/v1/chatrooms/1/recommendation`,
+        config
       );
+
+      setSpots(response.data.data.spots); // 여기서 받은 여행지 데이터를 상태에 저장
+
       console.log(response.data); // 여기서 받은 데이터를 처리
       // 예: 상태 업데이트 또는 화면에 표시 등
 
       // 서버로부터 받은 isCompleted 값을 상태에 설정
-      setIsCompleted(response.data.isCompleted);
+      console.log(response.data.data.completed);
+      setIsCompleted(response.data.data.completed);
       // 방장의 uid를 상태에 저장
-      setRoomManagerUid(response.data.roomManager);
+      console.log(response.data.data.managerId);
+      setManagerId(response.data.data.managerId);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -261,13 +274,7 @@ export default function Layout() {
           </PlanContainer>
           <PlanContainer>
             <ul>
-              {[
-                "여행 추천지1",
-                "여행 추천지2",
-                "여행 추천지3",
-                "여행 추천지4",
-                "여행 추천지5",
-              ].map((destination, index) => (
+              {spots.map((destination, index) => (
                 <DayPlanItem key={index}>
                   {day}일차 {destination}
                   <VoteResultRadio>
@@ -300,7 +307,7 @@ export default function Layout() {
             <StyledButton type="submit" onClick={handleSubmit}>
               여행지 만족도 제출
             </StyledButton>
-            {isCompleted && roomManagerUid === currentUserId && (
+            {isCompleted && ManagerId === currentUserId && (
               <StyledButton type="submit" onClick={handleConfirm}>
                 여행지 확정
               </StyledButton>
