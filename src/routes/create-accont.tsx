@@ -120,7 +120,7 @@ export default function CreateAccount() {
           type="password"
           required
         />
-        <Input type="submit" value={isLoading ? "Loading..." : "계정 생성"} />
+        <Input type="submit" value={isLoading ? "로딩..." : "계정 생성"} />
       </Form>
       {error !== "" ? <Error>{error}</Error> : null}
       <Switcher>
