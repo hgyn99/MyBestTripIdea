@@ -96,7 +96,7 @@ const ShareButton = styled.button`
   width: 30px;
   height: 30px;
   border: none;
-  background-color:white;
+  background-color: white;
 `;
 
 export interface ChatRoom {
@@ -116,35 +116,38 @@ export default function ChatRoomComponent({
   const handleJoinChat = () => {
     setChatroomId(chatroomId);
     console.log("채팅방에 참여합니다!", chatroomId);
-    if(chatroomStatus==="SURVEY")
-      navigate(`/chatrooms-survey`);
-    else if(chatroomStatus==="COMPLETE")
-      navigate(`/chat`)
+    if (chatroomStatus === "SURVEY") navigate(`/chatrooms-survey`);
+    else if (chatroomStatus === "COMPLETE") navigate(`/chat`);
   };
 
   const handleShareChat = () => {
     setChatroomId(chatroomId);
     const chatroomLink = `http://localhost:3000/invite/${chatroomId}`;
-    navigator.clipboard.writeText(chatroomLink)
+    navigator.clipboard
+      .writeText(chatroomLink)
       .then(() => {
-        console.log('채팅방 링크가 클립보드에 복사되었습니다:', chatroomLink);
+        console.log("채팅방 링크가 클립보드에 복사되었습니다:", chatroomLink);
+        alert("채팅방 링크가 클립보드에 복사되었습니다.");
       })
-      .catch(err => {
-        console.error('링크 복사에 실패했습니다:', err);
+      .catch((err) => {
+        console.error("링크 복사에 실패했습니다:", err);
+        alert("링크 복사에 실패했습니다");
       });
   };
 
   return (
     <Wrapper>
       <Title>{title}</Title>
-      <div style={{ display: 'flex', alignItems: 'center' }}>
+      <div style={{ display: "flex", alignItems: "center" }}>
         <ShareButton onClick={handleShareChat} />
-        {(chatroomStatus === "SURVEY" || chatroomStatus === "COMPLETE") ? (
+        {chatroomStatus === "SURVEY" || chatroomStatus === "COMPLETE" ? (
           <ParticipateButton status={chatroomStatus} onClick={handleJoinChat}>
             {getStatusText(chatroomStatus)} {/* 상태에 따른 텍스트 표시 */}
           </ParticipateButton>
         ) : (
-          <Status status={chatroomStatus}>{getStatusText(chatroomStatus)}</Status>
+          <Status status={chatroomStatus}>
+            {getStatusText(chatroomStatus)}
+          </Status>
         )}
       </div>
     </Wrapper>

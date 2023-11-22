@@ -100,6 +100,7 @@ const Chatroom_Questions: React.FC = () => {
   const navigate = useNavigate();
   const { chatRoomId } = useContext(ChatRoomContext);
 
+  console.log(chatRoomId + "!!");
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");
     // 토큰이 없다면 추가 작업을 하지 않고 함수를 종료
@@ -171,13 +172,17 @@ const Chatroom_Questions: React.FC = () => {
     const result = questions
       .map((question) => question.selectedOption)
       .join(",");
-    console.log("surveyResult: ", result);
 
     const postData = {
       result,
       version: 1,
       chatRoomId: chatRoomId, // 실제 chatRoomId를 가져오도록 변경해야함
     };
+
+    console.log("result: ", postData.result);
+    console.log("version: ", postData.version);
+    console.log("chatRoomId: ", postData.chatRoomId);
+
     const config = {
       headers: {
         "Content-Type": "application/json",
