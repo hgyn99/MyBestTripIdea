@@ -10,6 +10,7 @@ const PlanContainer = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  width: 100%;
 `;
 
 // 각 메뉴 아이템을 위한 스타일
@@ -64,8 +65,8 @@ const DayPlanContainer = styled.div`
   font-family: "Jalnan2TTF";
   align-items: center;
   justify-content: center;
-  //margin-left: 0px;
   color: black;
+  flex: 1; // PlanContainer 내에서 공간을 균등하게 차지
 `;
 
 const DayButton = styled.button`
@@ -153,6 +154,15 @@ const StyledButton = styled.button`
     background-color: #d8c19d; // 호버 시 배경색 변경
   } */
 `;
+
+const DayPlanRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px; // 아이템 사이 간격
+`;
+
 
 export default function Layout() {
   const navigate = useNavigate();
@@ -341,15 +351,18 @@ export default function Layout() {
             <DayButton onClick={handlePrevDay}>&lt;</DayButton>
             {day}일차
             <DayButton onClick={handleNextDay}>&gt;</DayButton>
-            만족&nbsp;&nbsp;불만족
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;만족&nbsp;&nbsp;불만족
           </PlanContainer>
           <PlanContainer>
             <ul>
               {spots.map((destination, index) => (
-                <DayPlanItem key={index}>
+                <DayPlanRow >
+                <DayPlanItem key={index} >
                   {day}일차{" "}
                   <DestinationHighlight>{destination}</DestinationHighlight>
-                  <VoteResultRadio>
+                </DayPlanItem>
+                <DayPlanItem>
+                <VoteResultRadio>
                     <label>
                       <input
                         type="radio"
@@ -372,6 +385,7 @@ export default function Layout() {
                     </label>
                   </VoteResultRadio>
                 </DayPlanItem>
+                </DayPlanRow>
               ))}
             </ul>
           </PlanContainer>

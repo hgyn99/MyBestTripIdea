@@ -22,7 +22,6 @@ export const Title = styled.div`
 export default function SendMessageForm() {
   const { chatRoomId } = useContext(ChatRoomContext);
   const [title, setTitle] = useState("");
-  const { accessToken } = useContext(AccessTokenContext);
 
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken"); // 로컬 스토리지에서 액세스토큰 불러오기
