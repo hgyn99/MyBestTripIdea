@@ -1,8 +1,9 @@
-import { Outlet, Link, useNavigate } from "react-router-dom";
+import { Outlet, Link, useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { auth } from "../firebase";
-import react, { useState } from "react";
+import react, { useState, useEffect, useContext } from "react";
 import axios from "axios";
+import { ChatRoomContext } from "./ChatRoomContext";
 
 const PlanContainer = styled.div`
   display: flex;
@@ -55,6 +56,10 @@ const RefreshButton = styled.div`
   border-radius: 50%;
 `;
 
+const OptionsContainer = styled.div`
+  color: gray;
+`;
+
 const DayPlanContainer = styled.div`
   font-family: "Jalnan2TTF";
   align-items: center;
@@ -85,6 +90,10 @@ const DayPlanItem = styled.li`
   display: flex;
   align-items: center;
   justify-content: flex-start;
+`;
+
+const DestinationHighlight = styled.span`
+  background-color: #f1d19d;
 `;
 
 const VoteResultRadio = styled.div`
@@ -148,10 +157,12 @@ const StyledButton = styled.button`
 export default function Layout() {
   const navigate = useNavigate();
   const [day, setDay] = useState(1);
-  const [voteResult, setvoteResult] = useState({});
-  const [isCompleted, setIsCompleted] = useState(false); // true 일때만 완료 버튼이 보임
+  const [voteResult1, setvoteResult] = useState({});
+  const [isCompleted, setIsCompleted] = useState(true); // true 일때만 완료 버튼이 보임
   const [ManagerId, setManagerId] = useState(null); // 방장의 uid를 저장할 상태
+  const [currentMemberId, setCurrentMemberId] = useState(null);
   const [spots, setSpots] = useState([]); // 여행지 데이터를 저장할 상태 변수
+  const { chatRoomId } = useContext(ChatRoomContext);
 
   const handleNextDay = () => {
     setDay((prevDay) => prevDay + 1);
@@ -173,8 +184,33 @@ export default function Layout() {
   // 제출 버튼 클릭시 호출될 이벤트 핸들러
   const handleSubmit = async () => {
     // 여기서 voteResult 상태를 서버로 전송
-    //  await axios.post("http://44.218.133.175:8080/api/v1/chatrooms/{chatroomId}/agree/{memberId}", voteResult);
-    console.log("Submitted data:", voteResult);
+    const accessToken = localStorage.getItem("accessToken"); // 로컬 스토리지에서 액세스토큰 불러오기
+    console.log(accessToken);
+
+    // 토큰이 없다면 추가 작업을 하지 않고 함수를 종료
+    if (!accessToken) {
+      console.log("No token found");
+      return;
+    }
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+    };
+
+    const voteResult = Object.entries(voteResult1)
+      .map(([key, value]) => `${value}`)
+      .join(",");
+
+    console.log("voteResult: ", voteResult);
+    console.log("chatRoomId: ", chatRoomId);
+    const response = await axios.post(
+      `http://44.218.133.175:8080/api/v1/chatrooms/${chatRoomId}/agree`,
+      voteResult,
+      config
+    );
+    console.log("post 결과:", response);
   };
 
   // RefreshButton 클릭 시 호출될 이벤트 핸들러
@@ -193,10 +229,9 @@ export default function Layout() {
     };
 
     try {
-      const chatroomId = "your_chatroom_id"; // 받아온 chatroomId로 교체
       const response = await axios.get(
         //`http://44.218.133.175:8080/api/v1/chatrooms/${chatroomId}/recommendation`
-        `http://44.218.133.175:8080/api/v1/chatrooms/1/recommendation`,
+        `http://44.218.133.175:8080/api/v1/chatrooms/${chatRoomId}/recommendation`,
         config
       );
 
@@ -206,22 +241,58 @@ export default function Layout() {
       // 예: 상태 업데이트 또는 화면에 표시 등
 
       // 서버로부터 받은 isCompleted 값을 상태에 설정
-      console.log(response.data.data.completed);
+      console.log("completed 값: ", response.data.data.completed);
       setIsCompleted(response.data.data.completed);
-      // 방장의 uid를 상태에 저장
-      console.log(response.data.data.managerId);
+      // 방장의 memberid를 상태에 저장
+      console.log("방장의 memberId: ", response.data.data.managerId);
       setManagerId(response.data.data.managerId);
+      // 현재 유저의 memberid를 상태에 저장
+      console.log("현재 유저의 memberId: ", response.data.data.currentMemberId);
+      setCurrentMemberId(response.data.data.currentMemberId);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
   const handleConfirm = () => {
+    const accessToken = localStorage.getItem("accessToken"); // 로컬 스토리지에서 액세스토큰 불러오기
+    console.log(accessToken);
+    // 토큰이 없다면 추가 작업을 하지 않고 함수를 종료
+    if (!accessToken) {
+      console.log("No token found");
+      return;
+    }
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+    };
     // 이 곳에 여행지 확정 버튼 클릭시 넘겨줄 데이터 전송
+    axios
+      .post(
+        `http://44.218.133.175:8080/api/v1/chatrooms/${chatRoomId}/finish`,
+        //"http://localhost:4000/api/v1/members/survey/1",
+        chatRoomId,
+        config
+      )
+      .then((response) => {
+        // console.log("서버 응답:", response);
+        // // 성공적으로 제출되었을 때의 추가 동작(옵션)
+        // navigate("/chatrooms");
+        console.log(response);
+      })
+      .catch((error) => {
+        console.error("Error posting data: ", error);
+      });
+
     navigate("/History"); // '/History' 경로로 이동
   };
 
-  // Firebase에서 현재 사용자의 uid를 가져오는 로직 (예시: 현재 로그인한 사용자의 uid)
-  const currentUserId = auth.currentUser?.uid;
+  useEffect(() => {
+    // 채팅방 입장시 refresh 버튼 한번 누르도록 설정
+    const accessToken = localStorage.getItem("accessToken"); // 로컬 스토리지에서 액세스토큰 불러오기
+    handleRefresh();
+  }, []);
 
   return (
     <>
@@ -276,7 +347,8 @@ export default function Layout() {
             <ul>
               {spots.map((destination, index) => (
                 <DayPlanItem key={index}>
-                  {day}일차 {destination}
+                  {day}일차{" "}
+                  <DestinationHighlight>{destination}</DestinationHighlight>
                   <VoteResultRadio>
                     <label>
                       <input
@@ -307,7 +379,7 @@ export default function Layout() {
             <StyledButton type="submit" onClick={handleSubmit}>
               여행지 만족도 제출
             </StyledButton>
-            {isCompleted && ManagerId === currentUserId && (
+            {isCompleted && ManagerId === currentMemberId && (
               <StyledButton type="submit" onClick={handleConfirm}>
                 여행지 확정
               </StyledButton>

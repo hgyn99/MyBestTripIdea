@@ -54,6 +54,7 @@ export default function Timeline() {
 
       console.log("챗룸아이디 입력됨");
       console.log(chatRoomId);
+      
       const messagesQuery = query(
         q,
         where("chatRoomId", "==", chatRoomId),

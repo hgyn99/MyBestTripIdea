@@ -155,7 +155,7 @@ export default function CreateAccount() {
             type="password"
             required
           />
-          <Input type="submit" value={isLoading ? "로딩..." : "로그인"} />
+          <Input type="submit" value={isLoading ? "로딩중..." : "로그인"} />
         </Form>
         {error !== "" ? <Error>{error}</Error> : null}
         <Switcher>

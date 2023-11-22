@@ -1,11 +1,14 @@
 import React, { useEffect, useContext } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import Chatroomlist from "../components/chatroomslist-timeline";
+import { ChatRoomContext } from "../components/ChatRoomContext";
 
 const Invite = () => {
   const { chatroomId } = useParams();
-  const chatroomIdNumber = parseInt(chatroomId ??" ", 10);
+  const chatroomIdNumber = parseInt(chatroomId ?? " ", 10);
   const accessToken = localStorage.getItem("accessToken");
+  const navigate = useNavigate();
   useEffect(() => {
     if (!accessToken) {
       console.log("No token found");
@@ -13,6 +16,7 @@ const Invite = () => {
     }
     const config = {
       headers: {
+        "Content-Type": "application/json",
         Authorization: `Bearer ${accessToken}`,
       },
     };
@@ -22,21 +26,22 @@ const Invite = () => {
     const password = prompt("채팅방에 접근하기 위한 비밀번호를 입력하세요.");
 
     if (password) {
-      console.log(chatroomIdNumber +"!!");
-      console.log(password+ "!!");
+      console.log(chatroomIdNumber + "!!");
+      console.log(password + "!!");
       (async () => {
         try {
           // axios.post를 await로 처리
 
           const response = await axios.post(
             `http://44.218.133.175:8080/api/v1/chatrooms/${chatroomIdNumber}/invite`,
-            { 
+            {
               password: password,
             },
             config
           );
           console.log("asd");
-          console.log('서버 응답:', response.data);
+          console.log("서버 응답:", response.data);
+          //navigate("/chat");
 
           // 성공 처리 로직
         } catch (error) {

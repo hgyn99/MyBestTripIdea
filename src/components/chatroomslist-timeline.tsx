@@ -52,6 +52,10 @@ export default function Chatroomlist() {
           setChatRooms(res.data.data.chatRoomInfos);
         } else {
           console.log("Data is not an array:", res.data.data.chatRoomInfos);
+          localStorage.setItem(
+            "accessTitle",
+            res.data.data.chatRoomInfos.title
+          ); // 채팅방 제목 저장
           // 적절한 오류 처리 로직을 추가하세요.
         }
       })
