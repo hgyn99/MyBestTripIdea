@@ -29,7 +29,7 @@ const exampleData1 = {
   chatroomStatus: "참여하기",
 };
 export default function Chatroomlist() {
-  const [chatRooms, setChatRooms] = useState<ChatRoom[]>([exampleData1]);
+  const [chatRooms, setChatRooms] = useState<ChatRoom[]>([]);
   //const { accessToken } = useContext(AccessTokenContext);
   const accessToken = localStorage.getItem("accessToken"); // 로컬 스토리지에서 액세스토큰 불러오기
   console.log("현재 토큰(챗룸타임라인): " + accessToken);

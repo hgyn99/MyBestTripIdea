@@ -36,7 +36,7 @@ const Wrapper = styled.div`
 
 export default function Chatroomlist() {
   const [historyID, setHistoryID] = useState<HistoryID[]>([]);
-  const { accessToken } = useContext(AccessTokenContext);
+  const accessToken = localStorage.getItem("accessToken");
 
   useEffect(() => {
     if (!accessToken) {
@@ -52,9 +52,9 @@ export default function Chatroomlist() {
 
     axios.get("http://44.218.133.175:8080/api/v1/history", config)
       .then((res) => {
-        if (Array.isArray(res.data)) {
+        if (Array.isArray(res.data.data.histories)) {
           console.log(res.data);
-          setHistoryID(res.data);
+          setHistoryID(res.data.data.histories);
         } else {
           console.log('Data is not an array:', res.data);
           // 적절한 오류 처리 로직을 추가하세요.
