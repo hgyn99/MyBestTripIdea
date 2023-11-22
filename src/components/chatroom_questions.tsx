@@ -100,7 +100,6 @@ const Chatroom_Questions: React.FC = () => {
   const navigate = useNavigate();
   const { chatRoomId } = useContext(ChatRoomContext);
 
-  console.log(chatRoomId+"!!");
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");
     // 토큰이 없다면 추가 작업을 하지 않고 함수를 종료
